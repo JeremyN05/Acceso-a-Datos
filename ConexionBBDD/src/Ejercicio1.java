@@ -7,6 +7,83 @@ import java.util.Scanner;
 public class Ejercicio1 {
 
 public static Scanner entrada = new Scanner(System.in);
+
+	public static void añadirJugador(Scanner entrada) {
+		
+		String url = "jdbc:mysql://localhost:3306/nba";
+		String usuario = "root";
+		String password = "cfgs";
+		
+		try {
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			Connection conexion = DriverManager.getConnection(url, usuario, password);
+			
+			System.out.println("Se ha conectado correctamente a la base de datos");
+			
+			String nombre;
+			String procedencia;
+			String altura;
+			int peso;
+			String posicion;
+			String nombreEquipo;
+			
+			System.out.println("Introduzca el nombre del jugador");
+			nombre = entrada.nextLine();
+			
+			System.out.println("Introduzca la procedencia del jugador");
+			procedencia = entrada.nextLine();
+			
+			System.out.println("Introduzca la altura del jugador");
+			altura = entrada.nextLine();
+			
+			System.out.println("Introduzca el peso del jugador");
+			peso = entrada.nextInt();
+			entrada.nextLine();
+			
+			System.out.println("Introduzca la posición del jugador");
+			posicion = entrada.nextLine();
+			
+			System.out.println("Introduzca el nombre del equipo");
+			nombreEquipo = entrada.nextLine();
+			
+			String consulta = "Insert into jugadores (codigo, Nombre, Procedencia, Altura, Peso, Posicion, Nombre_equipo) values (NULL, ?, ?, ?, ?, ?, ?) ";
+			PreparedStatement sentencia = conexion.prepareStatement(consulta);
+			
+			sentencia.setString(1, nombre);
+			sentencia.setString(2, procedencia);
+			sentencia.setString(3, altura);
+			sentencia.setInt(4, peso);
+			sentencia.setString(5, posicion);
+			sentencia.setString(6, nombreEquipo);
+			
+			ResultSet resultado = sentencia.executeQuery();
+			
+			System.out.printf("%-15s %-20s %-20s %-10s %-10s %-10s %-10s%n", "Codigo", "Nombre ", "Procedencia", "Altura", "Peso", "Posicion", "Nombre equipo");
+			System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
+			
+			while(resultado.next()) {
+				
+				int codigo = resultado.getInt("codigo");
+				nombre = resultado.getString("Nombre");
+				procedencia = resultado.getString("Procedencia");
+				altura = resultado.getString("Altura");
+				peso = resultado.getInt("Peso");
+				posicion = resultado.getString("Posicion");
+				nombreEquipo = resultado.getString("Nombre_equipo");
+				
+			    System.out.printf("%-15d %-20s %-20s %-10s %-10s %-10s %-10s%n", codigo, nombre, procedencia, altura, peso, posicion, nombreEquipo);
+				
+			}
+			
+		}catch(Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
 	
 	public static void mostrarEquiposYMostrarJugadores(Scanner entrada) {
 		
