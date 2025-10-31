@@ -1,0 +1,57 @@
+public static void mostrarMenuVendedores(Empleados empleados, Scanner entrada) {
+		
+		int opcion = 0;
+		String respuesta;
+	
+		do {
+			
+			System.out.println("----------------MENÚ VENDEDORES----------------");
+			System.out.println("1. Visualizar catálogo plantas.");
+			System.out.println("2. Realizar compra.");
+			System.out.println("3. Salir del menú");
+			
+			System.out.println("Seleccione una opción");
+			opcion = entrada.nextInt();
+			entrada.nextLine();
+			
+			switch (opcion) {
+			case 1:
+				
+				System.out.println("------------------------------------------------------------------------------PLANTAS------------------------------------------------------------------------------");
+				System.out.printf("%-15s %-15s %-15s %-65s %-10s %-15s \n", "ID", "Nombre", "Foto", "Descripcion", "Precio", "Stock");
+				System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				
+				GestorPlantas.mostrarPlantas();
+				
+				System.out.println("Desea realizar una compra S/N");
+				respuesta = entrada.nextLine();
+				
+				if(respuesta.equalsIgnoreCase("S")) {
+					
+					ArrayList<Compra> cesta = new ArrayList<>();
+					GestorVentas.GestionVentasCatalogo(cesta, entrada);
+					
+				}else {
+					
+					System.out.println("Operación cancelada, cerrando programa");
+					System.exit(0);
+				}
+				
+				break;
+
+			case 2:
+				
+				
+				break;
+				
+			case 3:
+				
+				System.out.println("Saliendo del programa");
+				break;
+				
+			default:
+				break;
+			}
+			
+		}while(opcion != 3);
+	}
