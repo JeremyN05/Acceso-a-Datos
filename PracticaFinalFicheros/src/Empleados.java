@@ -1,0 +1,49 @@
+
+import java.io.Serializable;
+
+public class Empleados implements Serializable{
+
+	int identificacion;
+	String nombre;
+	String contraseña;
+	String cargo;
+	
+	public Empleados(int identificacion, String nombre, String contraseña, String cargo) {
+		super();
+		this.identificacion = identificacion;
+		this.nombre = nombre;
+		this.contraseña = contraseña;
+		this.cargo = cargo;
+	}
+	
+	public int getIdentificacion() {
+		return identificacion;
+	}
+	public void setIdentificacion(int identificacion) {
+		this.identificacion = identificacion;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public String getContraseña() {
+		return contraseña;
+	}
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+	}
+	public String getCargo() {
+		return cargo;
+	}
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%-15s %-15s %-15s %-15s", identificacion, nombre, contraseña, cargo);
+	}
+	
+}
