@@ -92,9 +92,6 @@ public class Menu {
 				
 				if(respuesta.equalsIgnoreCase("S")) {
 					
-					
-					
-					
 					GestorVentas.GestionVentas(cesta, entrada);
 					
 				}else {

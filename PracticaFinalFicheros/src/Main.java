@@ -25,7 +25,7 @@ public class Main {
 		System.out.println(CYAN + "---------------------------------------EMPLEADOS---------------------------");
 		System.out.printf("%-15s %-15s %-15s %-15s \n", "ID", "Nombre", "contraseña", "cargo");
 		System.out.println("---------------------------------------------------------------------------" + RESET);
-		GestorEmpleados.leerEmpleados();
+		GestorEmpleados.leerEmpleados(true);
 		
 		System.out.println("\n");
 		

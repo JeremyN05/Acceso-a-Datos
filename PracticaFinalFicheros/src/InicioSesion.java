@@ -6,16 +6,17 @@ public class InicioSesion {
 	
 	public static void IniciarSesion(Scanner entrada) {
 		
-		String usuario;
+		int id;
 		String contraseña;
 		
-		System.out.println("Ingrese el nombre de usuario: ");
-		usuario = entrada.nextLine();
+		System.out.println("Ingrese el id de usuario: ");
+		id = entrada.nextInt();
+		entrada.nextLine();
 		
 		System.out.println("Ingrese la contraseña del usuario: ");
 		contraseña = entrada.nextLine();
 		
-		GestorEmpleados.ComprobarEmpleado(usuario, contraseña);
+		GestorEmpleados.ComprobarEmpleado(id, contraseña);
 		
 	}
 	
