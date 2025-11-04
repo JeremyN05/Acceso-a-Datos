@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 
 public class Menu {
 	
+	static final String RESET = "\u001B[0m";
+	static final String CYAN = "\u001B[36m";
+	
 	public static void mostrarMenuGestores(Empleados empleados, Scanner entrada) {
 		
 		int opcion = 0;
@@ -64,6 +67,7 @@ public class Menu {
 	public static void mostrarMenuVendedores(Empleados empleados, Scanner entrada) {
 		
 		int opcion = 0;
+		int id = 0;
 		String respuesta;
 		ArrayList<Compra> cesta = new ArrayList<>();
 	
@@ -87,7 +91,9 @@ public class Menu {
 				
 				GestorPlantas.mostrarPlantas();
 				
-				System.out.println("Desea realizar una compra S/N");
+				System.out.println("\n");
+				
+				System.out.println(CYAN + "Desea realizar una compra S/N" + RESET);
 				respuesta = entrada.nextLine();
 				
 				if(respuesta.equalsIgnoreCase("S")) {

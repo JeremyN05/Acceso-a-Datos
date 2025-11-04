@@ -5,7 +5,7 @@ public class GestorVentas {
 	
 public static void GestionVentas(ArrayList<Compra> cesta, Scanner entrada) {
 		
-		int id;
+		int id = 0;
 		int cantidad;
 		String confirmacion;		
 		
@@ -25,18 +25,16 @@ public static void GestionVentas(ArrayList<Compra> cesta, Scanner entrada) {
 			
 			GestorPlantas.comprobarCantidad(id, cantidad);
 			
-			System.out.println("¿Está seguro de realizar esta compra (S/N) ?");
+			System.out.println("¿Está seguro de realizar esta compra (S/N) ? \n");
 			confirmacion = entrada.nextLine();
 			
 			if(confirmacion.equalsIgnoreCase("s")) {
 				
-				System.out.println("--------------------RESUMEN DE COMPRA--------------------");
-				System.out.println("Planta a comprar: ");
+				Tickets.CrearTicket(id, cantidad);
 				
-				GestorPlantas.buscaPlantaID(id);
+			}else {
 				
-				System.out.println("Cantidad a comprar: ");
-				System.out.println(cantidad);
+				System.out.println("Cancelando compra");
 				
 			}
 			

@@ -25,7 +25,10 @@ public class GestorEmpleados {
 	            System.out.println("Bienvenido/a " + e.getNombre() + " (" + e.getCargo() + ")");
 
 	            if (e.getCargo().equalsIgnoreCase("vendedor")) {
+	            	
+	            	Sesion.setEmpleadoActual(e);
 	                Menu.mostrarMenuVendedores(e, entrada);
+	                
 	            }
 
 	            encontrado = true;
@@ -38,7 +41,7 @@ public class GestorEmpleados {
 	    }
 	}
 	
-	public static int IdAleatorio() {
+	private static int IdAleatorio() {
 		
 		Random random = new Random();
 		
@@ -47,7 +50,7 @@ public class GestorEmpleados {
 		
 	}
 	
-public static void EscribirEmpleado(){
+	public static void EscribirEmpleado(){
 		
 		ArrayList <Empleados> ListaEmpleados = new ArrayList <>();
 		

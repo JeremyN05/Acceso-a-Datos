@@ -87,7 +87,7 @@ public static List<Plantas> listaPlantas = new ArrayList<>();
 	}
 
 	
-public static void mostrarPlantas() {
+	public static void mostrarPlantas() {
 		
 		ArrayList<Plantas> plantas = null;
 		
