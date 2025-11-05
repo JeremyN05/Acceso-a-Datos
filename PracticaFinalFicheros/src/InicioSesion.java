@@ -8,6 +8,7 @@ public class InicioSesion {
 		
 		int id;
 		String contraseña;
+		String expRegPass = ".{5,7}"; 
 		
 		System.out.println("Ingrese el id de usuario: ");
 		id = entrada.nextInt();

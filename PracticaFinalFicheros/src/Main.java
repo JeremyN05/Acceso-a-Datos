@@ -8,6 +8,7 @@ public class Main {
 	static final String AZUL = "\u001B[34m";
 	static final String RESET = "\u001B[0m";
 	static final String CYAN = "\u001B[36m";
+	static final String VERDE_CLARITO = "\u001B[38;2;144;238;144m";
 	
 	public static void main(String[] args) {
 		
@@ -29,38 +30,10 @@ public class Main {
 		
 		System.out.println("\n");
 		
-		System.out.println("----------------Inicio Sesión----------------\n");
+		System.out.println(VERDE_CLARITO + "----------------Inicio Sesión----------------" + RESET);
 		InicioSesion.IniciarSesion(entrada);
 		
-		/*int opcion;
-		System.out.println("-----------------------------------------");
-		System.out.println("¿Qué desea hacer?");
-		System.out.println("1. Mostrar todas las plantas");
-		System.out.println("2. Mostrar todos los empleados");
-		System.out.println("-----------------------------------------");
-		
-		switch (opcion) {
-		case 1:
-			mostrarPlantas();
-			break;
-		
-		case 2:
-			mostrarEmpleados();
-			break;
-			
-		case 3:
-			
-			
-		default:
-			break;
-		}*/
 
-
-	}
-
-	private static void inIniciarSesion(Scanner entrada2) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

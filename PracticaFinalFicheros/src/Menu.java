@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class Menu {
 	
 	static final String RESET = "\u001B[0m";
 	static final String CYAN = "\u001B[36m";
+	static final String VERDE_AZULADO = "\u001B[38;2;80;240;255m";
+
 	
 	public static void mostrarMenuGestores(Empleados empleados, Scanner entrada) {
 		
@@ -67,13 +68,12 @@ public class Menu {
 	public static void mostrarMenuVendedores(Empleados empleados, Scanner entrada) {
 		
 		int opcion = 0;
-		int id = 0;
 		String respuesta;
 		ArrayList<Compra> cesta = new ArrayList<>();
 	
 		do {
 			
-			System.out.println("----------------MENÚ VENDEDORES----------------");
+			System.out.println(VERDE_AZULADO + "----------------MENÚ VENDEDORES----------------" + RESET);
 			System.out.println("1. Visualizar catálogo plantas.");
 			System.out.println("2. Realizar compra.");
 			System.out.println("3. Salir del menú.");

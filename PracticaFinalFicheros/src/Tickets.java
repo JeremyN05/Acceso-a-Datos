@@ -4,11 +4,12 @@ public class Tickets {
 	static final String RESET = "\u001B[0m";
 	static final String CYAN = "\u001B[36m";
 
-	public static void CrearTicket(int id, int cantidad) {
+	public static void CrearTicket(int id, int cantidad, float precioUnitario) {
 		
 		Empleados e = Sesion.getEmpleadoActual();
 		
 		int numeroTicket = 0;
+		int total = 0;
 		
 		numeroTicket++;
 		
@@ -22,8 +23,11 @@ public class Tickets {
 		
 		System.out.println("Nombre del empleado: " + e.getNombre() + "\n");
 		
-		System.out.printf("%-25s %-25s\n", "CodigoProducto", "Cantidad");
-		System.out.printf("%-25s %-25s\n", id, cantidad);
+		System.out.printf("%-25s %-25s %-25s\n", "CodigoProducto", "Cantidad", "Precio Unitario");
+		System.out.printf("%-25s %-25s %-25s\n", id, cantidad, precioUnitario);
+		
+		total = (int) (cantidad * precioUnitario);
+		System.out.println("total");
 		
 	}
 	

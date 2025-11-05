@@ -19,10 +19,11 @@ public class GestorEmpleados {
 	    boolean encontrado = false;
 
 	    for (Empleados e : empleados) {
+	    	
 	        if (id == e.getIdentificacion() && contraseña.equalsIgnoreCase(e.getContraseña())) {
 
 	            System.out.println("Iniciando sesión...");
-	            System.out.println("Bienvenido/a " + e.getNombre() + " (" + e.getCargo() + ")");
+	            System.out.println("Bienvenido/a " + e.getNombre() + " (" + e.getCargo() + ")" + "\n");
 
 	            if (e.getCargo().equalsIgnoreCase("vendedor")) {
 	            	
@@ -33,7 +34,13 @@ public class GestorEmpleados {
 
 	            encontrado = true;
 	            break;
-	        }
+	        
+	        }else {
+	        	
+	        	System.out.println("El id o el cargo no son correctos, error");
+	        	
+	        }    
+	        
 	    }
 
 	    if (!encontrado) {
@@ -92,31 +99,47 @@ public class GestorEmpleados {
 	}
 	
 	public static void leerCadaEmpleado() {
+		
 	ArrayList<Empleados> listaEmpleados = leerEmpleados(true);
 
     // Imprimir los empleados leídos
     if (listaEmpleados != null) {
-        for (Empleados empleado : listaEmpleados) {
-            System.out.println(empleado);
+        
+    	for (Empleados empleado : listaEmpleados) {
+            
+    		System.out.println(empleado);
+        	
         	}
+    	
     	}
+	
 	}
 	
 	public static ArrayList<Empleados> leerEmpleados(boolean mostrar) {
-	    ArrayList<Empleados> empleados = new ArrayList<>();
+	    
+		ArrayList<Empleados> empleados = new ArrayList<>();
 
-	    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("empleado.dat"))) {
-	        empleados = (ArrayList<Empleados>) ois.readObject();
+	    
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("empleado.dat"))) {
+	       
+			empleados = (ArrayList<Empleados>) ois.readObject();
 
 	        if (mostrar) {
-	            for (Empleados e : empleados) {
-	                System.out.println(e);
-	            }
+	           
+	        	for (Empleados e : empleados) {
+	               
+	        		System.out.println(e);
+	            
+	        	}
+	       
 	        }
 
-	    } catch (IOException | ClassNotFoundException e) {
-	        e.printStackTrace();
-	    }
+	    
+		} catch (IOException | ClassNotFoundException e) {
+	        
+			e.printStackTrace();
+	   
+		}
 
 	    return empleados;
 	}
