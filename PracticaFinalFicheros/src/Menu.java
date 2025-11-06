@@ -76,7 +76,8 @@ public class Menu {
 			System.out.println(VERDE_AZULADO + "----------------MENÚ VENDEDORES----------------" + RESET);
 			System.out.println("1. Visualizar catálogo plantas.");
 			System.out.println("2. Realizar compra.");
-			System.out.println("3. Salir del menú.");
+			System.out.println("3. Buscar por número de ticket");
+			System.out.println("4. Salir del menú.");
 			
 			System.out.println("Seleccione una opción: ");
 			opcion = entrada.nextInt();
@@ -114,6 +115,11 @@ public class Menu {
 				
 			case 3:
 				
+				
+				break;
+				
+			case 4:
+				
 				System.out.println("Saliendo del programa");
 				break;
 				
@@ -121,7 +127,7 @@ public class Menu {
 				break;
 			}
 			
-		}while(opcion != 3);
+		}while(opcion > 4);
 	
 	}
 	
