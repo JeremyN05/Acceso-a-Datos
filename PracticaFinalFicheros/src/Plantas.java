@@ -3,12 +3,12 @@ import java.io.Serializable;
 
 public class Plantas implements Serializable {
 
-	int codigo;
-	String nombre;
-	String foto;
-	String descripcion;
-	float precio;
-	int stock;
+	private int codigo;
+	private String nombre;
+	private String foto;
+	private String descripcion;
+	private float precio;
+	private int stock;
 
 	public Plantas(int codigo, String nombre, String foto, String descripcion, float precio, int stock) {
 		super();

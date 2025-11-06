@@ -35,11 +35,7 @@ public class GestorEmpleados {
 	            encontrado = true;
 	            break;
 	        
-	        }else {
-	        	
-	        	System.out.println("El id o el cargo no son correctos, error");
-	        	
-	        }    
+	        }   
 	        
 	    }
 

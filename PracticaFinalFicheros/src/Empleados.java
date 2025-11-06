@@ -3,10 +3,10 @@ import java.io.Serializable;
 
 public class Empleados implements Serializable{
 
-	int identificacion;
-	String nombre;
-	String contraseña;
-	String cargo;
+	private int identificacion;
+	private String nombre;
+	private String contraseña;
+	private String cargo;
 	
 	public Empleados(int identificacion, String nombre, String contraseña, String cargo) {
 		super();
