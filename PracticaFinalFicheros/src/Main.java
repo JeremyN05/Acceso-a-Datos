@@ -26,18 +26,6 @@ public class Main {
 		        baseDir + File.separator + "DEVOLUCIONES"
 		    };
 
-		    // Archivos a crear
-		    String[] archivos = {
-		        baseDir + File.separator + "PLANTAS" + File.separator + "plantas.xml",
-		        baseDir + File.separator + "PLANTAS" + File.separator + "plantasBaja.xml",
-		        baseDir + File.separator + "PLANTAS" + File.separator + "plantas.dat",
-		        baseDir + File.separator + "PLANTAS" + File.separator + "plantasbaja.dat",
-		        baseDir + File.separator + "EMPLEADOS" + File.separator + "empleados.dat",
-		        baseDir + File.separator + "EMPLEADOS" + File.separator + "BAJA" + File.separator + "empleadosBaja.dat",
-		        baseDir + File.separator + "TICKETS" + File.separator + "0.txt",
-		        baseDir + File.separator + "DEVOLUCIONES" + File.separator + "0.txt"
-		    };
-
 		    // Crear carpeta base si no existe
 		    File base = new File(baseDir);
 		    if (!base.exists()) {
@@ -52,18 +40,6 @@ public class Main {
 		        }
 		    }
 
-		    // Crear archivos
-		    for (String rutaArchivo : archivos) {
-		        File archivo = new File(rutaArchivo);
-		        try {
-		            if (!archivo.exists()) {
-		                archivo.createNewFile();
-		            }
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-		    }
-
 		    // Mensaje final
 		    System.out.println("Estructura verificada y actualizada correctamente en: " + baseDir);
 		
@@ -71,8 +47,28 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		crearArbolFicheros();
-		GestorEmpleados.EscribirEmpleado();
+		crearArbolFicheros(); //Crea el arbol de fichero
+		
+		 // Compruebo que las carpetas existan antes de crear archivos
+        File plantasDir = new File(System.getProperty("user.dir") + File.separator + "PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "PLANTAS");
+        
+        if (!plantasDir.exists()) {
+        
+        	plantasDir.mkdirs();
+        	
+        }
+
+        File empleadosDir = new File(System.getProperty("user.dir") + File.separator + "PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS");
+        
+        if (!empleadosDir.exists()) {
+        	
+        	empleadosDir.mkdirs();
+        	
+        } 
+		
+		GestorEmpleados.EscribirEmpleado(); //Crea el fichero empleados.dat con sus datos
+		GestorPlantas.CrearPlantas(); //Crea planta.xml con sus datos
+		GestorPlantas.crearPlantasDat(18.5f, 100);
 		
 		Scanner entrada = new Scanner(System.in);
 		

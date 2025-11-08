@@ -70,7 +70,7 @@ public class Plantas implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format( "%-15s %-15s %-15s %-55s %15.2f %15d", codigo, nombre, foto, descripcion, precio, stock);
+		return String.format( "%-15s %-15s %-15s %-55s %15.2f %8d", codigo, nombre, foto, descripcion, precio, stock);
 	}
 	
 }

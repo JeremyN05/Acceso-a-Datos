@@ -1,4 +1,13 @@
-/Tickets.class
+/GestorEmpleados.class
+/GestorPlantas.class
+/GestorVentas.class
+/InicioSesion.class
+/ListaTicket.class
+/Main.class
+/Menu.class
+/Plantas.class
 /Sesion.class
 /Ticket.class
-/ListaTicket.class
+/Tickets.class
+/Devoluciones.class
+/GestorDevoluciones.class

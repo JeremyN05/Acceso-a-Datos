@@ -57,12 +57,12 @@ public class GestorEmpleados {
 		
 		ArrayList <Empleados> ListaEmpleados = new ArrayList <>();
 		
-		File fichero = new File("empleado.dat");
+		File fichero = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "empleados.dat");
 		
 		if(!fichero.exists()) {
 			
-			try ( FileOutputStream FicheroEscritura = new FileOutputStream("empleado.dat");
-		             ObjectOutputStream escritura = new ObjectOutputStream(FicheroEscritura)) {
+			try ( FileOutputStream FicheroEscritura = new FileOutputStream(fichero);
+				     ObjectOutputStream escritura = new ObjectOutputStream(FicheroEscritura)) {
 
 		            	            
 		            Empleados empleado1 = new Empleados(1452,"Teresa","asb123","vendedor");
@@ -114,9 +114,17 @@ public class GestorEmpleados {
 	public static ArrayList<Empleados> leerEmpleados(boolean mostrar) {
 	    
 		ArrayList<Empleados> empleados = new ArrayList<>();
+		
+		 // Ruta donde se debe crear empleados.dat en caso de que no exista
+	    File fichero = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "empleados.dat");
 
-	    
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("empleado.dat"))) {
+	    // Comprobamos si el archivo existe
+	    if (!fichero.exists()) {
+	        System.out.println("❌ El archivo no existe: " + fichero.getAbsolutePath());
+	        return empleados;
+	    }
+
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fichero))) {
 	       
 			empleados = (ArrayList<Empleados>) ois.readObject();
 

@@ -1,0 +1,23 @@
+<plantas>
+    <planta>
+        <codigo>1</codigo>
+        <nombre>Rosa</nombre>
+        <tipo>Flor</tipo>
+        <foto>rosa.jpg</foto>
+        <descripcion>Flor roja muy común en jardines.</descripcion>
+    </planta>
+    <planta>
+        <codigo>2</codigo>
+        <nombre>Tulipán</nombre>
+        <tipo>Flor</tipo>
+        <foto>tulipan.jpg</foto>
+        <descripcion>Flor colorida originaria de los Países Bajos.</descripcion>
+    </planta>
+    <planta>
+        <codigo>3</codigo>
+        <nombre>Cactus</nombre>
+        <tipo>Suculenta</tipo>
+        <foto>cactus.jpg</foto>
+        <descripcion>Planta resistente de zonas áridas.</descripcion>
+    </planta>
+</plantas>

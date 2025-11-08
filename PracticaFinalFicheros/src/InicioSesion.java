@@ -37,7 +37,7 @@ public class InicioSesion {
 				
 			}else {
 				
-                System.out.println(ROJO + "❌ Contraseña inválida. Debe tener entre 5 y 7 caracteres y solo letras o números." + RESET);
+                System.out.println(ROJO + "Contraseña inválida. Debe tener entre 5 y 7 caracteres y solo letras o números." + RESET);
             
 			}
 		
