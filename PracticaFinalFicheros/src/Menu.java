@@ -16,7 +16,7 @@ public class Menu {
 		do {
 			
 			System.out.println("--------------------------MENÚ GESTORES--------------------------");
-			System.out.println("1. Dar de alta las plantes.");
+			System.out.println("1. Dar de alta las plantas.");
 			System.out.println("2. Dar de baja las plantas.");
 			System.out.println("3. Modificar campos de las plantas.");
 			System.out.println("4. Dar de alta empleados.");
@@ -25,13 +25,18 @@ public class Menu {
 			System.out.println("7. Estadísticas (datos extraídos de los tickets).");
 			System.out.println("8. Salir");
 			
+			opcion = entrada.nextInt();
+			entrada.nextLine();
+			
 			switch (opcion) {
 			case 1:
 				
+				GestorBaja_AltaPlantas.darAltaPlantas(entrada);
 				break;
 				
 			case 2:
 				
+				GestorBaja_AltaPlantas.darBajaPlantas(entrada);
 				break;
 				
 			case 3:
@@ -76,8 +81,9 @@ public class Menu {
 			System.out.println(VERDE_AZULADO + "----------------MENÚ VENDEDORES----------------" + RESET);
 			System.out.println("1. Visualizar catálogo plantas.");
 			System.out.println("2. Realizar compra.");
-			System.out.println("3. Buscar por número de ticket");
-			System.out.println("4. Salir del menú.");
+			System.out.println("3. Realizar devolución.");
+			System.out.println("4. Buscar por número de ticket.");
+			System.out.println("5. Salir del menú.");
 			
 			System.out.println("Seleccione una opción: ");
 			opcion = entrada.nextInt();
@@ -115,10 +121,20 @@ public class Menu {
 				
 			case 3:
 				
-				
+				GestorDevoluciones.realizarDevolucion(entrada);
 				break;
 				
 			case 4:
+				
+				System.out.println("Introduzca el id del ticket: ");
+				int idTicket = entrada.nextInt();
+				entrada.nextLine();
+
+				ArrayList<Ticket> lineas = Tickets.buscarTicketID(idTicket);
+				
+				break;
+				
+			case 5:
 				
 				System.out.println("Saliendo del programa");
 				break;
@@ -127,7 +143,7 @@ public class Menu {
 				break;
 			}
 			
-		}while(opcion > 4);
+		}while(opcion > 5);
 	
 	}
 	

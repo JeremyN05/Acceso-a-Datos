@@ -153,6 +153,7 @@ public class GestorPlantas {
 		            int stock;
 
 		            switch (codigo) {
+		            
 		                case 1: // Rosa
 		                    precio = 15.0f;
 		                    stock = 80;

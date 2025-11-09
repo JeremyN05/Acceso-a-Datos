@@ -21,6 +21,13 @@ public class Ticket {
 		this.precioUnitario = precioUnitario;
 		this.total = total;
 	}
+	
+	public Ticket(int codigoProducto, int unidades, float precioUnitario, float total) {
+	    this.codigoProducto = codigoProducto;
+	    this.unidades = unidades;
+	    this.precioUnitario = precioUnitario;
+	    this.total = total;
+	}
 
 	public int getCodigoEmpleado() {
 		return codigoEmpleado;

@@ -31,7 +31,7 @@ public class GestorVentas {
 			
 				GestorPlantas.comprobarCantidad(id, cantidad);
 			
-				System.out.println("¿Está seguro de realizar esta compra (S/N) ? \n");
+				System.out.println("¿Está seguro de realizar esta compra (S/N)?");
 				confirmacion = entrada.nextLine();
 			
 				if(confirmacion.equalsIgnoreCase("s")) {

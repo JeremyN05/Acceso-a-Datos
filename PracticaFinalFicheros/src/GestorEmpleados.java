@@ -20,7 +20,7 @@ public class GestorEmpleados {
 
 	    for (Empleados e : empleados) {
 	    	
-	        if (id == e.getIdentificacion() && contraseña.equalsIgnoreCase(e.getContraseña())) {
+	        if (id == e.getIdentificacion() && contraseña.equals(e.getContraseña())) {
 
 	            System.out.println("Iniciando sesión...");
 	            System.out.println("Bienvenido/a " + e.getNombre() + " (" + e.getCargo() + ")" + "\n");
@@ -30,6 +30,11 @@ public class GestorEmpleados {
 	            	Sesion.setEmpleadoActual(e);
 	                Menu.mostrarMenuVendedores(e, entrada);
 	                
+	            }else if(e.getCargo().equalsIgnoreCase("gestor")){
+	            	
+	            	Sesion.setEmpleadoActual(e);
+	            	Menu.mostrarMenuGestores(e, entrada);
+	            	
 	            }
 
 	            encontrado = true;
@@ -68,7 +73,7 @@ public class GestorEmpleados {
 		            Empleados empleado1 = new Empleados(1452,"Teresa","asb123","vendedor");
 		            Empleados empleado2 = new Empleados(0234,"Miguel Angel","123qwe","vendedor");
 		            Empleados empleado3 = new Empleados(7532,"Natalia","xs21qw4","gestor");
-		            Empleados empleado4 = new Empleados(IdAleatorio(), "Juan", "Juan1902", "gestor");
+		            Empleados empleado4 = new Empleados(IdAleatorio(), "Juan", "Juan190", "gestor");
 		            Empleados empleado5 = new Empleados(IdAleatorio(), "Isabel", "723fgw", "vendedor");
 		            Empleados empleado6 = new Empleados(IdAleatorio(), "Jose Luis", "a2us1", "gestor");
 		            
