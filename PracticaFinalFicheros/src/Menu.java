@@ -7,6 +7,7 @@ public class Menu {
 	static final String RESET = "\u001B[0m";
 	static final String CYAN = "\u001B[36m";
 	static final String VERDE_AZULADO = "\u001B[38;2;80;240;255m";
+	static final String VERDE_CLARITO = "\u001B[38;2;144;238;144m";
 
 	
 	public static void mostrarMenuGestores(Empleados empleados, Scanner entrada) {
@@ -15,7 +16,7 @@ public class Menu {
 		
 		do {
 			
-			System.out.println("--------------------------MENÚ GESTORES--------------------------");
+			System.out.println(VERDE_CLARITO + "--------------------------MENÚ GESTORES--------------------------" + RESET);
 			System.out.println("1. Dar de alta las plantas.");
 			System.out.println("2. Dar de baja las plantas.");
 			System.out.println("3. Modificar campos de las plantas.");
@@ -41,6 +42,7 @@ public class Menu {
 				
 			case 3:
 				
+				GestorPlantas.modificarCamposPlanta(entrada);
 				break;
 				
 			case 4:
@@ -49,9 +51,14 @@ public class Menu {
 				
 			case 5:
 				
+				GestorEmpleados.darBajaEmpleado();
 				break;
 				
 			case 6:
+				
+				break;
+				
+			case 7:
 				
 				break;
 				

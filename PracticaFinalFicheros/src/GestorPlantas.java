@@ -7,8 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -21,7 +23,264 @@ public class GestorPlantas {
 	public static List<Plantas> listaPlantas = new ArrayList<>();
 	private static final String BASE_DIR = "PracticaFinalFicheros_NarváezLobatoJeremy";
     private static final String PLANTAS_DIR = BASE_DIR + File.separator + "PLANTAS";
+    private static final String VERDE_OSCURITO = "\u001B[38;2;34;85;34m";
+    private static final String RESET = "\u001B[0m";
+    
+    private static void modificarStock(Scanner entrada) {
+		
+    	int id = 0;
+        int stock = 0;
 
+        System.out.print("Introduce el id de la planta a modificar su stock: ");
+        id = entrada.nextInt();
+        entrada.nextLine(); // limpiar buffer
+
+        Plantas plantaSeleccionada = buscaPlantaID(id);
+
+        if (plantaSeleccionada == null) {
+           
+        	System.out.println("Error: planta no encontrada");
+            
+        	return;
+        	
+        }
+
+        String input;
+        do {
+            
+        	System.out.print("Introduzca el nuevo stock: ");
+            input = entrada.nextLine();
+
+            if (!input.matches("^\\d+$")) {
+                
+            	System.out.println("Error: debes introducir un número entero válido.");
+            
+            } else {
+                
+            	stock = Integer.parseInt(input);
+            
+            }
+
+        } while (!input.matches("^\\d+$"));
+
+        plantaSeleccionada.setStock(stock);
+        guardarPlantasDat();
+
+        System.out.println("Stock modificado correctamente.");
+    	
+	}
+    
+    private static void modificarPrecio(Scanner entrada) {
+		
+    	int id = 0;
+    	float precio = 0;
+    	
+    	System.out.println("Introduce el id de la planta a modificar su precio");
+    	id = entrada.nextInt();
+    	entrada.nextLine();
+    	
+    	Plantas plantaSeleccionada = buscaPlantaID(id);
+    	
+    	if(plantaSeleccionada == null) {
+    	    
+    		System.out.println("Error planta no encontrada");
+    	    
+    		return;
+    		
+    	}
+    	
+    	String input;
+        do {
+            
+        	System.out.print("Introduzca el nuevo precio: ");
+            input = entrada.nextLine();
+
+            if (!input.matches("^\\d+(\\.\\d+)?$")) {
+                
+            	System.out.println("Error: debes introducir un número decimal válido.");
+            
+            } else {
+                
+            	precio = Float.parseFloat(input);
+            
+            }
+
+        } while (!input.matches("^\\d+(\\.\\d+)?$"));
+
+        plantaSeleccionada.setPrecio(precio);
+        guardarPlantasDat();
+
+        System.out.println("Precio modificado correctamente.");
+    	
+	}
+    
+    private static void modificarDescripcion(Scanner entrada) {
+		
+    	int id = 0;
+    	String descripcion;
+    	
+    	System.out.println("Introduce el id de la planta a modificar su descripción");
+    	id = entrada.nextInt();
+    	entrada.nextLine();
+    	
+    	Plantas plantaSeleccionada = buscaPlantaID(id);
+    	
+    	if(plantaSeleccionada == null) {
+    	    
+    		System.out.println("Error planta no encontrada");
+    	    
+    		return;
+    		
+    	}
+    	
+    	do {
+    		
+            System.out.print("Introduzca la nueva descripcion de la planta: ");
+            descripcion = entrada.nextLine();
+
+            if (!descripcion.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+               
+            	System.out.println("Error: la descripcion solo puede contener letras y espacios.");
+            
+            }
+
+    	} while (!descripcion.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"));
+    	
+    	plantaSeleccionada.setFoto(descripcion);
+    	
+        guardarPlantasXML();
+        
+        System.out.println("Descripcion modificada correctamente.");
+    	
+	}
+
+    private static void modificarFoto(Scanner entrada) {
+    	
+    	int id = 0;
+    	String nombre;
+    	
+    	System.out.println("Introduce el id de la planta a cambiar la foto");
+    	id = entrada.nextInt();
+    	entrada.nextLine();
+    	
+    	Plantas plantaSeleccionada = buscaPlantaID(id);
+    	
+    	if(plantaSeleccionada == null) {
+    	    
+    		System.out.println("Error planta no encontrada");
+    	    
+    		return;
+    		
+    	}
+    	
+    	do {
+    		
+            System.out.print("Introduzca el nuevo nombre de foto de la planta (nombre.jpg): ");
+            nombre = entrada.nextLine();
+
+            if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+\\.jpg$")) {
+               
+            	System.out.println("Error: el nombre de la foto solo puede contener letras y espacios y debe terminar en .jpg");
+            
+            }
+
+    	} while (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+\\.jpg$"));
+    	
+    	plantaSeleccionada.setFoto(nombre);
+    	
+        guardarPlantasXML();
+        
+        System.out.println("foto de la planta modificada correctamente.");
+    	
+    }
+    
+    private static void modificarNombre(Scanner entrada) {
+    	
+    	int id = 0;
+    	String nombre;
+    	
+    	System.out.println("Introduzca el id de la planta a cambiar el nombre: ");
+    	id = entrada.nextInt();
+    	entrada.nextLine();
+    	
+    	Plantas plantaSeleccionada = buscaPlantaID(id);
+    	
+    	if(plantaSeleccionada == null) {
+    	    
+    		System.out.println("Error planta no encontrada");
+    	    
+    		return;
+    		
+    	}
+    	
+    	do {
+    		
+            System.out.print("Introduzca el nuevo nombre de la planta: ");
+            nombre = entrada.nextLine();
+
+            if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+                
+            	System.out.println("Error: el nombre solo puede contener letras y espacios.");
+            
+            }
+
+        } while (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"));
+
+        plantaSeleccionada.setNombre(nombre);
+        
+        guardarPlantasXML();
+        
+        System.out.println("Nombre modificado correctamente.");
+    
+	}
+
+    public static void modificarCamposPlanta(Scanner entrada) {
+    	
+    	int opcion = 0;
+		
+    	System.out.println(VERDE_OSCURITO + "----------------------------MENÚ MODIFICAR CAMPOS----------------------------" + RESET);
+    	System.out.println("1. Modificar nombre.");
+    	System.out.println("2. Modificar la foto de la planta.");
+    	System.out.println("3. Modificar la descripción de la planta.");
+    	System.out.println("4. Modificar precio de la planta.");
+    	System.out.println("5. Modificar stock.");
+    	
+    	opcion = entrada.nextInt();
+    	entrada.nextLine();
+    	
+    	switch (opcion) {
+		
+    	case 1:
+    		
+    		modificarNombre(entrada);
+			break;
+			
+    	case 2:
+    		
+    		modificarFoto(entrada);
+			break;
+			
+    	case 3:
+    		
+    		modificarDescripcion(entrada);
+			break;
+			
+    	case 4:
+    		
+    		modificarPrecio(entrada);
+			break;
+			
+    	case 5:
+    		
+    		modificarStock(entrada);
+			break;
+
+		default:
+			System.out.println("Número introducido incorrecto, cerrando programa");
+			break;
+		}
+    	
+    }
 
 	public static void actualizarStock(int id, int cantidadComprada) {
 		
@@ -93,17 +352,42 @@ public class GestorPlantas {
 		
 	}
 	
+	public static void guardarPlantasXML() {
+	    File archivoXML = new File(PLANTAS_DIR + File.separator + "plantas.xml");
+
+	    try (PrintWriter pw = new PrintWriter(archivoXML)) {
+	        
+	    	pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	        pw.println("<plantas>");
+	        
+	        for (Plantas p : listaPlantas) {
+	            
+	        	pw.println("  <planta>");
+	            pw.println("    <codigo>" + p.getCodigo() + "</codigo>");
+	            pw.println("    <nombre>" + p.getNombre() + "</nombre>");
+	            pw.println("    <foto>" + p.getFoto() + "</foto>");
+	            pw.println("    <descripcion>" + p.getDescripcion() + "</descripcion>");
+	            pw.println("  </planta>");
+	        
+	        }
+	        
+	        pw.println("</plantas>");
+	        
+	        System.out.println("El archivo plantas.xml actualizado correctamente.");
+	    
+	    } catch (IOException e) {
+	        
+	    	System.out.println("Error al guardar plantas.xml");
+	        
+	    	e.printStackTrace();
+	    
+	    }
+	}
+
+	
 	public static void guardarPlantasDat() {
 		
 		File archivoDat = new File(PLANTAS_DIR + File.separator + "plantas.dat");
-
-	    if (!archivoDat.exists()) {
-	    	
-	        System.out.println("No se encontró plantas.dat.");
-	        
-	        return;
-	    
-	    }
 
 	    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivoDat))) {
 	    	
@@ -155,17 +439,35 @@ public class GestorPlantas {
 		            switch (codigo) {
 		            
 		                case 1: // Rosa
-		                    precio = 15.0f;
+		                    
+		                	precio = 15.0f;
 		                    stock = 80;
 		                    break;
+		                    
 		                case 2: // Tulipán
-		                    precio = 12.5f;
+		                    
+		                	precio = 12.5f;
 		                    stock = 120;
 		                    break;
+		                    
 		                case 3: // Cactus
-		                    precio = 9.0f;
+		                    
+		                	precio = 9.0f;
 		                    stock = 60;
 		                    break;
+		                    
+		                case 4: //Girasol
+		                	
+		                	precio = 18.99f;
+		                	stock = 180;
+		                	break;
+		                	
+		                case 5: //Margarita
+		                	
+		                	precio = 5.99f;
+		                	stock = 140;
+		                	break;
+		                    
 		                default:
 		                    precio = precioPorDefecto;
 		                    stock = stockPorDefecto;
@@ -195,7 +497,6 @@ public class GestorPlantas {
         
         File archivo = new File(ruta);
         
-        // Si ya existe, no lo volvemos a crear
         if (archivo.exists()) {
             System.out.println("El archivo plantas.xml ya existe");
             return;
@@ -226,6 +527,22 @@ public class GestorPlantas {
             writer.write("        <tipo>Suculenta</tipo>\n");
             writer.write("        <foto>cactus.jpg</foto>\n");
             writer.write("        <descripcion>Planta resistente de zonas áridas.</descripcion>\n");
+            writer.write("    </planta>\n");
+            
+            writer.write("    <planta>\n");
+            writer.write("        <codigo>4</codigo>\n");
+            writer.write("        <nombre>Girasol</nombre>\n");
+            writer.write("        <tipo>flor de jardin</tipo>\n");
+            writer.write("        <foto>girasol.jpg</foto>\n");
+            writer.write("        <descripcion>Planta alta con grandes flores amarillas.</descripcion>\n");
+            writer.write("    </planta>\n");
+            
+            writer.write("    <planta>\n");
+            writer.write("        <codigo>5</codigo>\n");
+            writer.write("        <nombre>Lavanda</nombre>\n");
+            writer.write("        <tipo>flor de jardin</tipo>\n");
+            writer.write("        <foto>margarita.jpg</foto>\n");
+            writer.write("        <descripcion>Flor blanca con centro amarillo.</descripcion>\n");
             writer.write("    </planta>\n");
             
             writer.write("</plantas>\n");

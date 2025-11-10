@@ -6,11 +6,10 @@ import java.util.Scanner;
 public class Main {
 
 	static Scanner entrada = new Scanner(System.in);
-	static final String VERDE = "\u001B[32m";
-	static final String AZUL = "\u001B[34m";
-	static final String RESET = "\u001B[0m";
-	static final String CYAN = "\u001B[36m";
-	static final String VERDE_CLARITO = "\u001B[38;2;144;238;144m";
+	private static final String VERDE = "\u001B[32m";
+	private static final String RESET = "\u001B[0m";
+	private static final String CYAN = "\u001B[36m";
+	private static final String VERDE_CLARITO = "\u001B[38;2;144;238;144m";
 	
 	private static void crearArbolFicheros() {
 		

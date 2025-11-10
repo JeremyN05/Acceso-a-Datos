@@ -20,4 +20,18 @@
         <foto>cactus.jpg</foto>
         <descripcion>Planta resistente de zonas áridas.</descripcion>
     </planta>
+    <planta>
+        <codigo>4</codigo>
+        <nombre>Girasol</nombre>
+        <tipo>flor de jardin</tipo>
+        <foto>girasol.jpg</foto>
+        <descripcion>Planta alta con grandes flores amarillas.</descripcion>
+    </planta>
+    <planta>
+        <codigo>5</codigo>
+        <nombre>Lavanda</nombre>
+        <tipo>flor de jardin</tipo>
+        <foto>margarita.jpg</foto>
+        <descripcion>Flor blanca con centro amarillo.</descripcion>
+    </planta>
 </plantas>

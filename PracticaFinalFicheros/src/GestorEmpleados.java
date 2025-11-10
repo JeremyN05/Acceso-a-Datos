@@ -13,6 +13,135 @@ public class GestorEmpleados {
 	
 	static Scanner entrada = new Scanner(System.in);
 	
+	public static void mostrarEmpleadosBaja() {
+
+	    File ficheroBaja = new File("PracticaFinalFicheros_NarváezLobatoJeremy"
+	            + File.separator + "EMPLEADOS" + File.separator + "BAJA"
+	            + File.separator + "empleadosBaja.dat");
+
+	    if (!ficheroBaja.exists() || ficheroBaja.length() == 0) {
+	        System.out.println("No hay empleados en baja.");
+	        return;
+	    }
+
+	    ArrayList<Empleados> empleadosBaja = new ArrayList<>();
+	    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ficheroBaja))) {
+	        empleadosBaja = (ArrayList<Empleados>) ois.readObject();
+	    } catch (Exception e) {
+	        System.out.println("Error al leer empleados en baja.");
+	        e.printStackTrace();
+	        return;
+	    }
+
+	    System.out.println("----- Empleados en BAJA -----");
+	    for (Empleados e : empleadosBaja) {
+	        System.out.println("ID: " + e.getIdentificacion() +
+	                           " | Nombre: " + e.getNombre() +
+	                           " | Cargo: " + e.getCargo());
+	    }
+	    System.out.println("-----------------------------");
+	}
+
+	
+	private static Empleados comprobarEmpleadoID(int id) {
+
+	    ArrayList<Empleados> empleados = leerEmpleados(false);
+
+	    for (Empleados e : empleados) {
+	        
+	    	if (e.getIdentificacion() == id) {
+	            
+	    		return e;
+	        
+	    	}
+	    }
+
+	    return null;
+	}
+	
+	public static void darBajaEmpleado() {
+    
+	    System.out.println("Introduce el ID del empleado a dar de baja:");
+	    int id = entrada.nextInt();
+	    entrada.nextLine();
+
+	    
+	    Empleados empleadoSeleccionado = comprobarEmpleadoID(id);
+
+	    if (empleadoSeleccionado == null) {
+	        
+	    	System.out.println("Error: empleado no encontrado.");
+	        
+	    	return;
+	    
+	    }
+
+	    File carpetaBaja = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "BAJA");
+	    
+	    if (!carpetaBaja.exists()) {
+	        
+	    	carpetaBaja.mkdirs();
+	    
+	    }
+
+	    File ficheroBaja = new File(carpetaBaja, "empleadosBaja.dat");
+
+	    ArrayList<Empleados> empleadosBaja = new ArrayList<>();
+	    
+	    if (ficheroBaja.exists() && ficheroBaja.length() > 0) {
+	        
+	    	try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ficheroBaja))) {
+	            
+	    		empleadosBaja = (ArrayList<Empleados>) ois.readObject();
+	        
+	    	} catch (Exception e) {
+	            
+	    		System.out.println("Error al leer empleados en baja.");
+	        
+	    	}
+	    }
+
+
+	    empleadosBaja.add(empleadoSeleccionado);
+
+	    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ficheroBaja))) {
+	       
+	    	oos.writeObject(empleadosBaja);
+	        
+	    	System.out.println("Empleado dado de baja correctamente.");
+
+	    } catch (IOException e) {
+	        
+	    	System.out.println("Error al guardar empleados en baja.");
+	        
+	        e.printStackTrace();
+	    
+	    }
+
+	    ArrayList<Empleados> empleadosActivos = leerEmpleados(false);
+	    
+	    if (empleadosActivos.removeIf(e -> e.getIdentificacion() == id)) {
+	        
+	    	File ficheroActivos = new File("PracticaFinalFicheros_NarváezLobatoJeremy"+ File.separator + "EMPLEADOS" + File.separator + "empleados.dat");
+
+	        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ficheroActivos))) {
+	            
+	        	oos.writeObject(empleadosActivos);
+	            
+	        } catch (IOException e) {
+	        	
+	            System.out.println("Error al actualizar empleados activos.");
+	            
+	            e.printStackTrace();
+	            
+	        }
+	        
+	    }
+
+	    mostrarEmpleadosBaja();
+	    
+	}
+	
 	public static void ComprobarEmpleado(int id, String contraseña) {
 
 	    ArrayList<Empleados> empleados = leerEmpleados(false);
