@@ -59,6 +59,106 @@ public class GestorEmpleados {
 	    return null;
 	}
 	
+	public static void recuperarEmpleadoBaja() {
+	    
+	    System.out.println("Introduce el ID del empleado a recuperar:");
+	    int id = entrada.nextInt();
+	    entrada.nextLine();
+
+	   
+	    File carpetaBaja = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "BAJA");
+	    File ficheroBaja = new File(carpetaBaja, "empleadosBaja.dat");
+	    File ficheroActivos = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "empleados.dat");
+
+	    if (!ficheroBaja.exists() || ficheroBaja.length() == 0) {
+	        
+	    	System.out.println("No hay empleados dados de baja.");
+	        return;
+	    
+	    }
+
+	    ArrayList<Empleados> empleadosBaja = new ArrayList<>();
+	    ArrayList<Empleados> empleadosActivos = new ArrayList<>();
+
+	    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ficheroBaja))) {
+	        
+	    	empleadosBaja = (ArrayList<Empleados>) ois.readObject();
+	    
+	    } catch (Exception e) {
+	        
+	    	System.out.println("Error al leer empleados en baja.");
+	        
+	        e.printStackTrace();
+	        
+	        return;
+	    }
+
+	    // Leer activos
+	    if (ficheroActivos.exists() && ficheroActivos.length() > 0) {
+	        
+	    	try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ficheroActivos))) {
+	            
+	    		empleadosActivos = (ArrayList<Empleados>) ois.readObject();
+	        
+	    	} catch (Exception e) {
+	           
+	    		System.out.println("Error al leer empleados activos.");
+	            e.printStackTrace();
+	            
+	            return;
+	        
+	    	}
+	    
+	    }
+	    
+	    Empleados empleadoSeleccionado = comprobarEmpleadoID(id);
+
+	    if (empleadoSeleccionado == null) {
+	        
+	    	System.out.println("No se encontró ningún empleado con ese ID en la lista de bajas.");
+	        return;
+	    
+	    }
+
+	    empleadosBaja.remove(empleadoSeleccionado);
+	    empleadosActivos.add(empleadoSeleccionado);
+
+
+	    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ficheroBaja))) {
+	        
+	    	oos.writeObject(empleadosBaja);
+	    
+	    } catch (IOException e) {
+	        
+	    	System.out.println("Error al actualizar lista de bajas.");
+	        e.printStackTrace();
+	    
+	    }
+
+	    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ficheroActivos))) {
+	        
+	    	oos.writeObject(empleadosActivos);
+	        
+	    	System.out.println("Empleado recontratado correctamente.");
+	    
+	    } catch (IOException e) {
+	        
+	    	System.out.println("Error al actualizar empleados activos.");
+	        e.printStackTrace();
+	    
+	    }
+
+	    System.out.println("\n--- Empleados activos actuales ---");
+	    
+	    for (Empleados e : empleadosActivos) {
+
+	    	System.out.printf("%-10d %-15s %-10s %-10s\n", e.getIdentificacion(), e.getNombre(), e.getContraseña(), e.getCargo());
+	    
+	    }
+	
+	}
+
+	
 	public static void darBajaEmpleado() {
     
 	    System.out.println("Introduce el ID del empleado a dar de baja:");
