@@ -42,7 +42,7 @@ public class GestorBaja_AltaPlantas {
 	    int idPlanta = entrada.nextInt();
 	    entrada.nextLine();
 
-	    //Le0 plantasBaja.xml para buscar la planta que indico el usuario
+	    //Leo plantasBaja.xml para buscar la planta que indico el usuario
 	    
 	    ArrayList<PlantasBaja_Alta> listaBajasXML = new ArrayList<>();
 	    PlantasBaja_Alta plantaAlta = null;

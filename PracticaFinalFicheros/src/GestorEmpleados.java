@@ -13,6 +13,22 @@ public class GestorEmpleados {
 	
 	static Scanner entrada = new Scanner(System.in);
 	
+	private static boolean existeId(ArrayList<Empleados> lista, int id) {
+	    
+		for (Empleados e : lista) {
+	        
+			if (e.getIdentificacion() == id) {
+	            
+	        	return true;
+	        
+	        }
+	    
+	    }
+	    
+	    return false;
+	
+	}
+	
 	public static void darAltaEmpleados() {
 		
 		ArrayList <Empleados> ListaEmpleados = new ArrayList <>();
@@ -25,8 +41,22 @@ public class GestorEmpleados {
 			
 		}
 		
+		if (fichero.length() > 0) {
+            
+			try (ObjectInputStream lectura = new ObjectInputStream(new FileInputStream(fichero))) {
+                
+				ListaEmpleados = (ArrayList<Empleados>) lectura.readObject();
+            
+			} catch (Exception e) {
+                
+				System.out.println("Advertencia: no se pudieron leer empleados existentes (" + e.getMessage() + ")");
+            
+			}
+        
+		}
+		
 		String nombre;
-		int contraseña = 0;
+		String contraseña;
 		String cargo;
 		
 		do {
@@ -42,24 +72,57 @@ public class GestorEmpleados {
 
     	} while (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"));
 		
-		String input;
-        
+            
 		do {
-            
-        	System.out.print("Introduzca la contraseña del nuevo empleado debe tener entre 5 o 7 digitos");
-            input = entrada.nextLine();
+		    
+			System.out.print("Introduzca la contraseña del nuevo empleado (entre 5 y 7 caracteres alfanuméricos): ");
+		    contraseña = entrada.nextLine();
 
-            if (!input.matches("^\\d{5,7}$")) {
-                
-            	System.out.println("Error: debes introducir un número entero válido.");
-            
-            } else {
-                
-            	contraseña = Integer.parseInt(input);
-            
-            }
+		    if (!contraseña.matches("^[A-Za-z0-9]{5,7}$")) {
+		        
+		        System.out.println("Error: la contraseña debe tener entre 5 y 7 caracteres alfanuméricos.");
+		    
+		    }
+		
+		} while (!contraseña.matches("^[A-Za-z0-9]{5,7}$"));
+		
+		do {
+		    
+			System.out.print("Introduzca el cargo del nuevo empleado (gestor o vendedor): ");
+		    cargo = entrada.nextLine().trim();
 
-        } while (!input.matches("^\\d{5,7}$"));
+		    if (!cargo.equalsIgnoreCase("gestor") && !cargo.equalsIgnoreCase("vendedor")) {
+		       
+		    	System.out.println("Error: el cargo debe ser 'gestor' o 'vendedor'.");
+		        cargo = "";
+		    
+		    }
+		
+		} while (cargo.isEmpty());
+		 
+		 int id;
+		 
+	        do {
+	            
+	        	id = IdAleatorio();
+	        
+	        } while (existeId(ListaEmpleados, id));
+
+	        Empleados nuevoEmpleado = new Empleados(id, nombre, contraseña, cargo);
+	        
+	        ListaEmpleados.add(nuevoEmpleado);
+
+	        try (ObjectOutputStream escritura = new ObjectOutputStream(new FileOutputStream(fichero))) {
+	            
+	        	escritura.writeObject(ListaEmpleados);
+	            
+	            System.out.println("Empleado añadido correctamente: " + nuevoEmpleado);
+	        
+	        } catch (IOException e) {
+	            
+	        	System.out.println("Error al guardar el empleado: " + e.getMessage());
+	        
+	        }
 		
 	}
 	
@@ -391,7 +454,7 @@ public class GestorEmpleados {
 		            escritura.writeObject(ListaEmpleados);
 		            
 
-		            System.out.println("Objetos escritos correctamente en empleado.dat");
+		            System.out.println("Objetos escritos correctamente en empleados.dat");
 
 		        } catch (IOException i) {
 		            

@@ -47,7 +47,7 @@ public class Menu {
 				
 			case 4:
 				
-				
+				GestorEmpleados.darAltaEmpleados();
 				break;
 				
 			case 5:
@@ -134,12 +134,8 @@ public class Menu {
 				break;
 				
 			case 4:
-				
-				System.out.println("Introduzca el id del ticket: ");
-				int idTicket = entrada.nextInt();
-				entrada.nextLine();
 
-				ArrayList<Ticket> lineas = Tickets.buscarTicketID(idTicket);
+				ArrayList<Ticket> lineas = Tickets.buscarTicketPorId(entrada);
 				
 				break;
 				

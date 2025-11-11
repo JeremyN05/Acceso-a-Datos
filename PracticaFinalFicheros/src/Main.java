@@ -12,33 +12,40 @@ public class Main {
 	
 	private static void crearArbolFicheros() {
 		
-		 // Carpeta base = directorio actual del proyecto en Eclipse
 		 String baseDir = System.getProperty("user.dir") + File.separator + "PracticaFinalFicheros_NarváezLobatoJeremy";
 
-		    // Rutas de carpetas
 		    String[] carpetas = {
-		        baseDir + File.separator + "PLANTAS",
+		        
+		    	baseDir + File.separator + "PLANTAS",
 		        baseDir + File.separator + "EMPLEADOS",
 		        baseDir + File.separator + "EMPLEADOS" + File.separator + "BAJA",
 		        baseDir + File.separator + "TICKETS",
 		        baseDir + File.separator + "DEVOLUCIONES"
+		    
 		    };
 
-		    // Crear carpeta base si no existe
+		    
 		    File base = new File(baseDir);
+		    
 		    if (!base.exists()) {
-		        base.mkdirs();
+		        
+		    	base.mkdirs();
+		    
 		    }
 
-		    // Crear carpetas
+		   
 		    for (String carpeta : carpetas) {
-		        File dir = new File(carpeta);
-		        if (!dir.exists()) {
-		            dir.mkdirs();
-		        }
+		        
+		    	File dir = new File(carpeta);
+		        
+		    	if (!dir.exists()) {
+		           
+		    		dir.mkdirs();
+		        
+		    	}
+		    
 		    }
-
-		    // Mensaje final
+		    
 		    System.out.println("Estructura verificada y actualizada correctamente en: " + baseDir);
 		
 	}

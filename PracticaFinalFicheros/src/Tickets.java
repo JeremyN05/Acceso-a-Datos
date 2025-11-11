@@ -13,59 +13,110 @@ public class Tickets {
 	static final String RESET = "\u001B[0m";
 	static final String CYAN = "\u001B[36m";
 	
-	public static ArrayList<Ticket> buscarTicketID(int idTicket) {
-		
+	public static ArrayList<Ticket> buscarTicketPorId(Scanner entrada) {
+	    
+		System.out.print("Ingrese el ID del ticket a buscar: ");
+	    int idTicket = entrada.nextInt();
+	    entrada.nextLine();
+
+	    File archivoTicket = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS/" + idTicket + ".txt");
+
+	    if (!archivoTicket.exists()) {
+	        
+	    	System.out.println("❌ El ticket con ID " + idTicket + " no existe.");
+	        return new ArrayList<>();
+	    
+	    }
+
+	    System.out.println("\n----- 📄 TICKET " + idTicket + " -----");
+
+	    try (Scanner lector = new Scanner(archivoTicket)) {
+	        
+	    	while (lector.hasNextLine()) {
+	            
+	    		System.out.println(lector.nextLine());
+	        
+	        }
+	    
+	    } catch (IOException e) {
+	       
+	    	System.out.println("⚠️ Error al leer el ticket.");
+	        e.printStackTrace();
+	    
+	    }
+
+	    System.out.println("--------------------------------------");
+
+	    ArrayList<Ticket> lineas = obtenerLineas(idTicket);
+
+	    if (lineas.isEmpty()) {
+	        
+	    	System.out.println("El ticket no contiene líneas de productos.");
+	    
+	    } else {
+	        
+	    	System.out.println("Se han cargado " + lineas.size() + " líneas de productos del ticket.");
+	    
+	    }
+
+	    return lineas;
+	}
+	
+	private static ArrayList<Ticket> obtenerLineas(int idTicket) {
+	    
 		ArrayList<Ticket> lineas = new ArrayList<>();
-        File carpetaTickets = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS");
+	    File fichero = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS/" + idTicket + ".txt");
 
-        if (!carpetaTickets.exists()) {
-            
-        	System.out.println("La carpeta de tickets no existe.");
-            return lineas;
-        
-        }
+	    if (!fichero.exists()) {
+	        
+	    	System.out.println("El ticket no existe.");
+	        
+	        return lineas;
+	    
+	    }
 
-        File archivoTicket = new File(carpetaTickets, idTicket + ".txt");
+	    boolean leerProductos = false;
 
-        if (!archivoTicket.exists()) {
-            
-        	System.out.println("El ticket con ID " + idTicket + " no existe.");
-            
-            return lineas;
-        }
+	    try (Scanner lector = new Scanner(fichero)) {
+	        
+	    	while (lector.hasNextLine()) {
+	            
+	    		String linea = lector.nextLine().trim();
 
-        System.out.println("Contenido del ticket " + idTicket + ":");
+	            if (linea.equals("LINEAS DE PRODUCTOS")) {
+	                
+	            	leerProductos = true;
+	                lector.nextLine();
+	                
+	                continue;
+	            }
 
-        try (Scanner lector = new Scanner(archivoTicket)) {
-            while (lector.hasNextLine()) {
-                
-            	String linea = lector.nextLine();
-                System.out.println(linea); // mostramos todo tal cual
-                String[] partes = linea.trim().split("\\s+");
+	            if (leerProductos) {
+	                
+	            	if (linea.startsWith("---") || linea.startsWith("TOTAL") || linea.isEmpty()) break;
 
-                // intentamos crear Ticket solo si tiene 4 columnas numéricas (productos)
-                if (partes.length == 4) {
-                    
-                	try {
-                        
-                		int codigoProducto = Integer.parseInt(partes[0]);
-                        int unidades = Integer.parseInt(partes[1]);
-                        float precioUnitario = Float.parseFloat(partes[2]);
-                        float total = Float.parseFloat(partes[3]);
+	                String[] partes = linea.split("\\s+");
+	                if (partes.length == 4) {
+	                    
+	                	try {
+	                        
+	                		int codigo = Integer.parseInt(partes[0]);
+	                        int unidades = Integer.parseInt(partes[1]);
+	                        float precio = Float.parseFloat(partes[2]);
+	                        float total = Float.parseFloat(partes[3]);
+	                        lineas.add(new Ticket(codigo, unidades, precio, total));
+	                    
+	                	} catch (NumberFormatException e) {
+	                    
+	                	}
+	                }
+	            }
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 
-                        lineas.add(new Ticket(codigoProducto, unidades, precioUnitario, total));
-                    
-                	} catch (NumberFormatException e) {
-                        // ignorar líneas que no sean productos
-                    }
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return lineas;
-		
+	    return lineas;
 	}
 	
 	private static int ticketSiguiente() {
@@ -76,10 +127,11 @@ public class Tickets {
 		int ultimoTicket = 0;
 		
 		if (archivos != null) {
-		    for (File f : archivos) {
+		    
+			for (File f : archivos) {
 		        String nombre = f.getName();
 
-		        // Solo considerar los archivos .txt
+
 		        if (nombre.endsWith(".txt")) {
 		            
 		        	try {
@@ -104,75 +156,52 @@ public class Tickets {
 		return numeroTicket;
 	}
 
-	public static void CrearTicket(int id, int cantidad, float precioUnitario) {
-		
-		Empleados e = Sesion.getEmpleadoActual();
-		
-		int numeroTicket = ticketSiguiente(); //Guardo el numero de ticket que guarda la funcion ticketSiguiente.
-		
-		File carpetaTickets = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "TICKETS");
-	     
-		if (!carpetaTickets.exists()) {
-			
-			 carpetaTickets.mkdirs();
-			 
-		}
-		
-		File archivoTicket = new File(carpetaTickets, numeroTicket + ".txt"); //Guardo el ticket con su número correcto sin sobreescribir los anteriores.
-		
-		LocalDateTime fechaVenta = LocalDateTime.now();
+	public static void CrearTicket(int idProducto, int cantidad, float precioUnitario) {
+
+	    Empleados e = Sesion.getEmpleadoActual();
+	    int numeroTicket = ticketSiguiente();
+
+	    File carpetaTickets = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS");
+	    if (!carpetaTickets.exists()) carpetaTickets.mkdirs();
+
+	    File archivoTicket = new File(carpetaTickets, numeroTicket + ".txt");
+
+	    LocalDateTime fechaVenta = LocalDateTime.now();
 	    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoTicket))) {
-		    
-		    writer.write("==================================== TICKET DE COMPRA ====================================\n");
-		    writer.write("Número Ticket: " + numeroTicket + "\n");
-		    writer.write("Empleado: " + e.getNombre() + " (ID: " + e.getIdentificacion() + ")\n");
-		    writer.write("Cargo: " + e.getCargo() + "\n");
-		    writer.write("Fecha de venta: " + fechaVenta.format(formato) + "\n");
-		    writer.write("-------------------------------------------------------------------------------\n");
-		    
-		    writer.write(String.format("%-15s %-15s %-15s %-15s\n",
-		            "CódigoProd", "Cantidad", "PrecioUnit", "TotalLinea"));
-		    
-		    // Aquí escribes la línea de la venta actual
-		    float totalLinea = cantidad * precioUnitario;
-		    writer.write(String.format("%-15d %-15d %-15.2f %-15.2f\n",
-		            id, cantidad, precioUnitario, totalLinea));
+	    float totalLinea = cantidad * precioUnitario;
 
-		    writer.write("-------------------------------------------------------------------------------\n");
-		    writer.write(String.format("TOTAL FINAL: %.2f €\n", totalLinea));
-		    writer.write("===============================================================================");
-		    
-		    System.out.println("Ticket creado correctamente");
-		    
-		    writer.flush();
-		    
-		    System.out.println("Ticket:");
-		    
-		    try (Scanner lector = new Scanner(archivoTicket)) {
-		        
-		    	while (lector.hasNextLine()) {
-		            
-		    		System.out.println(lector.nextLine());
-		        
-		    	}
-		    
-		    } catch (IOException i) {
-		        
-		    	System.out.println("No se pudo mostrar el ticket.");
-		    
-		    }
-		    
-		    GestorPlantas.actualizarStock(id, cantidad);
-	        GestorPlantas.guardarPlantasDat(); // guardo cambios en plantas.dat
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoTicket))) {
 
-		} catch (IOException ex) {
-		
-			System.out.println("No se pudo guardar el ticket.");
-		
-		}
-		
+	        writer.write("==================================== TICKET DE COMPRA ====================================\n");
+	        writer.write("Número Ticket: " + numeroTicket + "\n");
+	        writer.write("Empleado: " + e.getNombre() + " (ID: " + e.getIdentificacion() + ")\n");
+	        writer.write("Cargo: " + e.getCargo() + "\n");
+	        writer.write("Fecha de venta: " + fechaVenta.format(formato) + "\n");
+	        writer.write("-------------------------------------------------------------------------------\n");
+	        writer.write("LINEAS DE PRODUCTOS\n"); // MARCA de inicio de productos
+	        writer.write(String.format("%-10s %-10s %-10s %-10s\n", "Código", "Cant", "Precio", "Total"));
+	        writer.write(String.format("%-10d %-10d %-10.2f %-10.2f\n", idProducto, cantidad, precioUnitario, totalLinea));
+	        writer.write("-------------------------------------------------------------------------------\n");
+	        writer.write(String.format("TOTAL FINAL: %.2f €\n", totalLinea));
+	        writer.write("===============================================================================\n");
+
+	        System.out.println("Ticket creado correctamente.");
+	        
+	        try (Scanner lector = new Scanner(archivoTicket)) {
+	            
+	        	while (lector.hasNextLine()) System.out.println(lector.nextLine());
+	        
+	        }
+
+	        GestorPlantas.actualizarStock(idProducto, cantidad);
+	        GestorPlantas.guardarPlantasDat();
+
+	    } catch (IOException ex) {
+	        
+	    	System.out.println("No se pudo guardar el ticket.");
+	        ex.printStackTrace();
+	    
+	    }
 	}
 	
 }
