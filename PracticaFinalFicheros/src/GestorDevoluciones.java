@@ -16,45 +16,64 @@ public class GestorDevoluciones {
 		    File fichero = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS/" + idTicket + ".txt");
 
 		    if (!fichero.exists()) {
-		        System.out.println("El ticket no existe.");
+		        
+		    	System.out.println("El ticket no existe.");
+		        
 		        return lineas;
+		    
 		    }
 
 		    boolean leerProductos = false;
 
 		    try (Scanner lector = new Scanner(fichero)) {
-		        while (lector.hasNextLine()) {
-		            String linea = lector.nextLine().trim();
+		       
+		    	while (lector.hasNextLine()) {
+		            
+		        	String linea = lector.nextLine().trim();
 
-		            // Empieza a leer cuando encuentra la línea de encabezado
 		            if (linea.startsWith("CódigoProd")) {
-		                leerProductos = true;
-		                continue;
+		                
+		            	leerProductos = true;
+		                
+		            	continue;
+		            
 		            }
 
 		            if (leerProductos) {
-		                // Fin de productos
+		                
 		                if (linea.startsWith("---") || linea.startsWith("TOTAL") || linea.isEmpty()) {
-		                    break;
+		                    
+		                	break;
+		                
 		                }
 
-		                // Separar por espacios y convertir a Ticket
 		                String[] partes = linea.split("\\s+");
+		                
 		                if (partes.length >= 4) {
-		                    try {
-		                        int codigo = Integer.parseInt(partes[0]);
+		                    
+		                	try {
+		                        
+		                    	int codigo = Integer.parseInt(partes[0]);
 		                        int cantidad = Integer.parseInt(partes[1]);
 		                        float precio = Float.parseFloat(partes[2]);
 		                        float total = Float.parseFloat(partes[3]);
 		                        lineas.add(new Ticket(codigo, cantidad, precio, total));
+		                    
 		                    } catch (NumberFormatException e) {
-		                        // Ignorar si no se puede parsear
+		                       
+		                    
 		                    }
+		                
 		                }
+		            
 		            }
+		        
 		        }
+		    
 		    } catch (FileNotFoundException e) {
-		        e.printStackTrace();
+		        
+		    	e.printStackTrace();
+		    
 		    }
 
 		    return lineas;
@@ -85,7 +104,6 @@ public class GestorDevoluciones {
 
         }
         
-        // Crear carpeta para devoluciones si no existe
         File carpetaDevoluciones = new File("PracticaFinalFicheros_NarváezLobatoJeremy/DEVOLUCIONES");
         
         if (!carpetaDevoluciones.exists()) {
@@ -94,25 +112,39 @@ public class GestorDevoluciones {
        
         }
         
-        int numeroDevolucion = 1; // primera devolución por defecto
+        int numeroDevolucion = 1;
+        
         File[] archivos = carpetaDevoluciones.listFiles();
+        
         if (archivos != null) {
-            for (File f : archivos) {
-                String nombre = f.getName();
-                if (nombre.startsWith("devolucion") && nombre.endsWith(".txt")) {
-                    try {
-                        int num = Integer.parseInt(nombre.replace("devolucion", "").replace(".txt", ""));
-                        if (num >= numeroDevolucion) {
-                            numeroDevolucion = num + 1;
-                        }
-                    } catch (NumberFormatException e) {
-                        // Ignorar archivos que no tengan número válido
-                    }
-                }
-            }
+            
+        	for (File f : archivos) {
+                
+        		String nombre = f.getName();
+                
+        		if (nombre.startsWith("devolucion") && nombre.endsWith(".txt")) {
+                    
+        			try {
+                        
+        				int num = Integer.parseInt(nombre.replace("devolucion", "").replace(".txt", ""));
+                        
+        				if (num >= numeroDevolucion) {
+                           
+        					numeroDevolucion = num + 1;
+                        
+        				}
+                    
+        			} catch (NumberFormatException e) {
+
+                    
+        			}
+                
+        		}
+            
+        	}
+        
         }
         
-        // Crear archivo de devolución
         
         File archivoDevolucion = new File(carpetaDevoluciones, numeroDevolucion + ".txt");
         

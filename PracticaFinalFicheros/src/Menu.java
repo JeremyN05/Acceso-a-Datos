@@ -47,7 +47,7 @@ public class Menu {
 				
 			case 4:
 				
-				GestorEmpleados.recuperarEmpleadoBaja();
+				
 				break;
 				
 			case 5:
@@ -57,6 +57,7 @@ public class Menu {
 				
 			case 6:
 				
+				GestorEmpleados.recuperarEmpleadoBaja();
 				break;
 				
 			case 7:

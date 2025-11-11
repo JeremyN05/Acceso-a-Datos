@@ -65,16 +65,17 @@ public class GestorEmpleados {
 	    int id = entrada.nextInt();
 	    entrada.nextLine();
 
-	   
 	    File carpetaBaja = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "BAJA");
 	    File ficheroBaja = new File(carpetaBaja, "empleadosBaja.dat");
 	    File ficheroActivos = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "empleados.dat");
 
-	    if (!ficheroBaja.exists() || ficheroBaja.length() == 0) {
-	        
-	    	System.out.println("No hay empleados dados de baja.");
-	        return;
 	    
+	    if (!ficheroBaja.exists() || ficheroBaja.length() == 0) {
+	       
+	    	System.out.println("No hay empleados dados de baja.");
+	        
+	        return;
+	   
 	    }
 
 	    ArrayList<Empleados> empleadosBaja = new ArrayList<>();
@@ -91,47 +92,60 @@ public class GestorEmpleados {
 	        e.printStackTrace();
 	        
 	        return;
+	    
 	    }
-
-	    // Leer activos
+	    
 	    if (ficheroActivos.exists() && ficheroActivos.length() > 0) {
 	        
 	    	try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ficheroActivos))) {
-	            
-	    		empleadosActivos = (ArrayList<Empleados>) ois.readObject();
-	        
-	    	} catch (Exception e) {
 	           
-	    		System.out.println("Error al leer empleados activos.");
+	        	empleadosActivos = (ArrayList<Empleados>) ois.readObject();
+	        
+	        } catch (Exception e) {
+	            
+	        	System.out.println("Error al leer empleados activos.");
+	            
 	            e.printStackTrace();
 	            
 	            return;
 	        
-	    	}
+	        }
 	    
 	    }
+
+	    Empleados empleadoSeleccionado = null;
+	    for (Empleados e : empleadosBaja) {
+	        
+	    	if (e.getIdentificacion() == id) {
+	           
+	    		empleadoSeleccionado = e;
+	            
+	    		break;
+	        
+	        }
 	    
-	    Empleados empleadoSeleccionado = comprobarEmpleadoID(id);
+	    }
 
 	    if (empleadoSeleccionado == null) {
 	        
 	    	System.out.println("No se encontró ningún empleado con ese ID en la lista de bajas.");
+	        
 	        return;
 	    
 	    }
 
 	    empleadosBaja.remove(empleadoSeleccionado);
 	    empleadosActivos.add(empleadoSeleccionado);
-
-
+	    
 	    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ficheroBaja))) {
 	        
 	    	oos.writeObject(empleadosBaja);
 	    
 	    } catch (IOException e) {
-	        
+	       
 	    	System.out.println("Error al actualizar lista de bajas.");
-	        e.printStackTrace();
+	        
+	    	e.printStackTrace();
 	    
 	    }
 
@@ -151,12 +165,13 @@ public class GestorEmpleados {
 	    System.out.println("\n--- Empleados activos actuales ---");
 	    
 	    for (Empleados e : empleadosActivos) {
-
+	       
 	    	System.out.printf("%-10d %-15s %-10s %-10s\n", e.getIdentificacion(), e.getNombre(), e.getContraseña(), e.getCargo());
 	    
 	    }
 	
 	}
+
 
 	
 	public static void darBajaEmpleado() {
