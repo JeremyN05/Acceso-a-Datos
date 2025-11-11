@@ -90,6 +90,7 @@ public class GestorPlantas {
     	}
     	
     	String input;
+    	
         do {
             
         	System.out.print("Introduzca el nuevo precio: ");
@@ -353,6 +354,7 @@ public class GestorPlantas {
 	}
 	
 	public static void guardarPlantasXML() {
+		
 	    File archivoXML = new File(PLANTAS_DIR + File.separator + "plantas.xml");
 
 	    try (PrintWriter pw = new PrintWriter(archivoXML)) {

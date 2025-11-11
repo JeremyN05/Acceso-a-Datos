@@ -13,35 +13,95 @@ public class GestorEmpleados {
 	
 	static Scanner entrada = new Scanner(System.in);
 	
+	public static void darAltaEmpleados() {
+		
+		ArrayList <Empleados> ListaEmpleados = new ArrayList <>();
+		
+		File fichero = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "empleados.dat");
+		
+		if(!fichero.exists()){
+			
+			System.out.println("Error, empleados.dat no existe");
+			
+		}
+		
+		String nombre;
+		int contraseña = 0;
+		String cargo;
+		
+		do {
+    		
+            System.out.print("Introduzca el nombre del empleado: ");
+            nombre = entrada.nextLine();
+
+            if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+               
+            	System.out.println("Error: la descripcion solo puede contener letras y espacios.");
+            
+            }
+
+    	} while (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"));
+		
+		String input;
+        
+		do {
+            
+        	System.out.print("Introduzca la contraseña del nuevo empleado debe tener entre 5 o 7 digitos");
+            input = entrada.nextLine();
+
+            if (!input.matches("^\\d{5,7}$")) {
+                
+            	System.out.println("Error: debes introducir un número entero válido.");
+            
+            } else {
+                
+            	contraseña = Integer.parseInt(input);
+            
+            }
+
+        } while (!input.matches("^\\d{5,7}$"));
+		
+	}
+	
 	public static void mostrarEmpleadosBaja() {
 
-	    File ficheroBaja = new File("PracticaFinalFicheros_NarváezLobatoJeremy"
-	            + File.separator + "EMPLEADOS" + File.separator + "BAJA"
-	            + File.separator + "empleadosBaja.dat");
+	    File ficheroBaja = new File("PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "EMPLEADOS" + File.separator + "BAJA" + File.separator + "empleadosBaja.dat");
 
 	    if (!ficheroBaja.exists() || ficheroBaja.length() == 0) {
-	        System.out.println("No hay empleados en baja.");
-	        return;
+	        
+	    	System.out.println("No hay empleados en baja.");
+	        
+	    	return;
+	    
 	    }
 
 	    ArrayList<Empleados> empleadosBaja = new ArrayList<>();
+	    
 	    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ficheroBaja))) {
-	        empleadosBaja = (ArrayList<Empleados>) ois.readObject();
+	        
+	    	empleadosBaja = (ArrayList<Empleados>) ois.readObject();
+	    
 	    } catch (Exception e) {
-	        System.out.println("Error al leer empleados en baja.");
-	        e.printStackTrace();
-	        return;
+	       
+	    	System.out.println("Error al leer empleados en baja.");
+	        
+	    	e.printStackTrace();
+	        
+	    	return;
+	    
 	    }
 
 	    System.out.println("----- Empleados en BAJA -----");
+	    
 	    for (Empleados e : empleadosBaja) {
-	        System.out.println("ID: " + e.getIdentificacion() +
-	                           " | Nombre: " + e.getNombre() +
-	                           " | Cargo: " + e.getCargo());
+	       
+	    	System.out.println("ID: " + e.getIdentificacion() + " | Nombre: " + e.getNombre() + " | Cargo: " + e.getCargo());
+	    
 	    }
+	    
 	    System.out.println("-----------------------------");
+	
 	}
-
 	
 	private static Empleados comprobarEmpleadoID(int id) {
 
@@ -343,23 +403,6 @@ public class GestorEmpleados {
 		
 	}
 	
-	public static void leerCadaEmpleado() {
-		
-	ArrayList<Empleados> listaEmpleados = leerEmpleados(true);
-
-    // Imprimir los empleados leídos
-    if (listaEmpleados != null) {
-        
-    	for (Empleados empleado : listaEmpleados) {
-            
-    		System.out.println(empleado);
-        	
-        	}
-    	
-    	}
-	
-	}
-	
 	public static ArrayList<Empleados> leerEmpleados(boolean mostrar) {
 	    
 		ArrayList<Empleados> empleados = new ArrayList<>();
@@ -369,7 +412,7 @@ public class GestorEmpleados {
 
 	    // Comprobamos si el archivo existe
 	    if (!fichero.exists()) {
-	        System.out.println("❌ El archivo no existe: " + fichero.getAbsolutePath());
+	        System.out.println("El archivo no existe: " + fichero.getAbsolutePath());
 	        return empleados;
 	    }
 
