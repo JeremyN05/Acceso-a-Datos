@@ -355,9 +355,9 @@ public class GestorPlantas {
 	}
 	
 	public static void guardarPlantasXML() {
-		
-	    File archivoXML = new File(PLANTAS_DIR + File.separator + "plantas.xml");
-
+	    
+		File archivoXML = new File(PLANTAS_DIR, "plantas.xml");
+	    
 	    try (PrintWriter pw = new PrintWriter(archivoXML)) {
 	        
 	    	pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -375,34 +375,48 @@ public class GestorPlantas {
 	        }
 	        
 	        pw.println("</plantas>");
-	        
-	        System.out.println("El archivo plantas.xml actualizado correctamente.");
 	    
 	    } catch (IOException e) {
-	        
-	    	System.out.println("Error al guardar plantas.xml");
 	        
 	    	e.printStackTrace();
 	    
 	    }
+	
 	}
-
 	
 	public static void guardarPlantasDat() {
-		
-		File archivoDat = new File(PLANTAS_DIR + File.separator + "plantas.dat");
+	    
+		File archivoDat = new File(PLANTAS_DIR, "plantas.dat");
 
-	    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivoDat))) {
-	    	
-	        oos.writeObject(new ArrayList<>(listaPlantas)); // Guardamos la lista completa
+	    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivoDat, false))) {
 	        
-	        System.out.println("plantas.dat actualizado correctamente.");
+	    	ArrayList<Plantas> listaActiva = new ArrayList<>();
+
+	        for (Plantas p : listaPlantas) {
+	        	
+	            if (p.getCodigo() > 0) {
+	                
+	            	listaActiva.add(new Plantas(
+	                    p.getCodigo(),
+	                    p.getNombre(),
+	                    p.getFoto(),
+	                    p.getDescripcion(),
+	                    p.getPrecio(),
+	                    p.getStock()
+	                
+	            			));
+	            
+	            }
 	        
+	        }
+
+	        oos.writeObject(listaActiva);
+	        System.out.println("plantas.dat actualizado correctamente con " + listaActiva.size() + " plantas activas.");
+	    
 	    } catch (IOException e) {
-	       
-	    	System.out.println("Error al guardar plantas.dat");
 	        
-	    	e.printStackTrace();
+	    	System.out.println("Error al guardar plantas.dat");
+	        e.printStackTrace();
 	    
 	    }
 	
@@ -564,80 +578,72 @@ public class GestorPlantas {
 
 	
 	public static void mostrarPlantas() {
-	    try {
-	        // 1️⃣ Leer XML
-	        File ficheroXML = new File(PLANTAS_DIR + File.separator + "plantas.xml");
+	    
+		try {
 	        
-	        if (!ficheroXML.exists()) {
-	            
+	    	File xmlFile = new File(PLANTAS_DIR, "plantas.xml");
+	       
+	        if (!xmlFile.exists()) {
+	           
 	        	System.out.println("No existe el archivo plantas.xml");
-	            
-	        	return;
-	        
+	            return;
+	       
 	        }
-
-	        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ficheroXML);
+	        
+	        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
 	        NodeList lista = doc.getElementsByTagName("planta");
-
 	        listaPlantas.clear();
 
 	        for (int i = 0; i < lista.getLength(); i++) {
 	            
 	        	Element e = (Element) lista.item(i);
-
-	            int codigo = Integer.parseInt(e.getElementsByTagName("codigo").item(0).getTextContent());
+	            
+	        	int codigo = Integer.parseInt(e.getElementsByTagName("codigo").item(0).getTextContent());
 	            String nombre = e.getElementsByTagName("nombre").item(0).getTextContent();
 	            String foto = e.getElementsByTagName("foto").item(0).getTextContent();
 	            String descripcion = e.getElementsByTagName("descripcion").item(0).getTextContent();
 
 
 	            listaPlantas.add(new Plantas(codigo, nombre, foto, descripcion, 0f, 0));
-	        
 	        }
+
+	        File datFile = new File(PLANTAS_DIR, "plantas.dat");
 	        
-	        File plantasDAT = new File(PLANTAS_DIR + File.separator + "plantas.dat");
-	        
-	        if (plantasDAT.exists() && plantasDAT.length() > 0) {
+	        if (datFile.exists() && datFile.length() > 0) {
 	            
-	        	try (RandomAccessFile raf = new RandomAccessFile(plantasDAT, "r")) {
+	        	try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(datFile))) {
 	                
-	            	while (raf.getFilePointer() < raf.length()) {
+	        		ArrayList<Plantas> datList = (ArrayList<Plantas>) ois.readObject();
+	                
+	        		for (Plantas xmlPlanta : listaPlantas) {
 	                    
-	                	if (raf.length() - raf.getFilePointer() < Integer.BYTES + Float.BYTES + Integer.BYTES) {
+	        			for (Plantas datPlanta : datList) {
 	                        
-	                    	break; // evitar EOFException
-	                    
-	                    }
-
-	                    int codigo = raf.readInt();
-	                    float precio = raf.readFloat();
-	                    int stock = raf.readInt();
-
-	                    for (Plantas p : listaPlantas) {
-	                        
-	                    	if (p.getCodigo() == codigo) {
-	                            p.setPrecio(precio);
-	                            p.setStock(stock);
+	        				if (xmlPlanta.getCodigo() == datPlanta.getCodigo()) {
+	                           
+	        					xmlPlanta.setPrecio(datPlanta.getPrecio());
+	                            xmlPlanta.setStock(datPlanta.getStock());
 	                            
 	                            break;
 	                        
-	                    	}
-	                    
-	                    }
-	                }
-	            
-	            }
+	        				}
+	                   
+	        			}
+	               
+	        		}
+
+	        	}
 	        
 	        }
 
 	        for (Plantas p : listaPlantas) {
 	           
 	        	System.out.println(p);
-	        
+	       
 	        }
-	    
+
 	    } catch (Exception e) {
-	     
+	        
 	    	e.printStackTrace();
 	    
 	    }

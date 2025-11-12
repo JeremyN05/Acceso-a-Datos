@@ -1,172 +1,171 @@
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-
 public class GestorBaja_AltaPlantas {
-	
-	public static void darAltaPlantas(Scanner entrada) {
-	    File carpetaPlantas = new File("PracticaFinalFicheros_NarváezLobatoJeremy/PLANTAS");
 
-	    System.out.println("Ingrese el ID de la planta a dar de alta:");
-	    int idPlanta = entrada.nextInt();
-	    entrada.nextLine();
+    private static final String BASE_DIR = "PracticaFinalFicheros_NarváezLobatoJeremy";
+    private static final String PLANTAS_DIR = BASE_DIR + File.separator + "PLANTAS";
+    private static final String BAJA_DIR = PLANTAS_DIR + File.separator + "BAJA";
 
-	    // Leer lista de bajas
-	    ArrayList<PlantasBaja_Alta> listaBajas = new ArrayList<>();
-	    PlantasBaja_Alta plantaAlta = null;
-	    File plantasBajaXML = new File(carpetaPlantas, "plantasBaja.xml");
+    public static void darBajaPlantas(Scanner entrada) {
+        
+    	System.out.print("Ingrese el ID de la planta a dar de baja: ");
+        int idPlanta = entrada.nextInt();
+        entrada.nextLine();
 
-	    if (plantasBajaXML.exists() && plantasBajaXML.length() > 0) {
-	       
-	    	try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(plantasBajaXML))) {
-	            
-	        	listaBajas = (ArrayList<PlantasBaja_Alta>) decoder.readObject();
-	            
-	            for (PlantasBaja_Alta p : listaBajas) {
-	                
-	            	if (p.getCodigo() == idPlanta) {
-	                    
-	                	plantaAlta = p;
-	                    break;
-	                
-	                }
-	            
-	            }
-	        
-	        } catch (IOException e) {
-	            
-	        	e.printStackTrace();
-	            return;
-	       
-	        }
-	    
-	    }
+        Plantas plantaBaja = GestorPlantas.buscaPlantaID(idPlanta);
+       
+        if (plantaBaja == null) {
+           
+        	System.out.println("❌ Planta no encontrada en activas.");
+           
+            return;
+       
+        }
 
-	    if (plantaAlta == null) {
-	        
-	    	System.out.println("Planta no encontrada en bajas.");
-	        return;
-	    
-	    }
 
-	    listaBajas.remove(plantaAlta);
-	   
-	    try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(plantasBajaXML))) {
-	        
-	    	encoder.writeObject(listaBajas);
-	    
-	    } catch (IOException e) {
-	        
-	    	e.printStackTrace();
-	    
-	    }
+        GestorPlantas.listaPlantas.remove(plantaBaja);
+        GestorPlantas.guardarPlantasXML();
+        GestorPlantas.guardarPlantasDat();
 
-	    Plantas plantaActiva = new Plantas(
-	    	    
-	    		plantaAlta.getCodigo(),
-	    	    plantaAlta.getNombre(),
-	    	    plantaAlta.getFoto(),
-	    	    plantaAlta.getDescripcion(),
-	    	    plantaAlta.getPrecio(),
-	    	    plantaAlta.getStock()
-	    	
-	    		);
+        File carpetaBajas = new File(BAJA_DIR);
+        if (!carpetaBajas.exists()) { 
+        	
+        	carpetaBajas.mkdirs();
 
-	    	GestorPlantas.listaPlantas.add(plantaActiva);
+        }
+        
+        File archivoBaja = new File(carpetaBajas, "plantasBaja.xml");
+        ArrayList<PlantasBaja_Alta> listaBajas = new ArrayList<>();
 
-	    	GestorPlantas.guardarPlantasXML();
-	    	GestorPlantas.guardarPlantasDat();
+        if (archivoBaja.exists() && archivoBaja.length() > 0) {
+            
+        	try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(archivoBaja))) {
+             
+            	listaBajas = (ArrayList<PlantasBaja_Alta>) decoder.readObject();
+           
+            } catch (Exception e) {
+               
+            	e.printStackTrace();
+           
+            }
+        
+        }
 
-	    	System.out.println("Planta dada de alta correctamente: " + plantaAlta.getNombre());
-	}
+        listaBajas.add(new PlantasBaja_Alta(
+                plantaBaja.getCodigo(),
+                plantaBaja.getNombre(),
+                plantaBaja.getFoto(),
+                plantaBaja.getDescripcion(),
+                plantaBaja.getPrecio(),
+                plantaBaja.getStock()
+        
+        		));
 
-	public static void darBajaPlantas(Scanner entrada) {
-		
-	    File carpetaPlantas = new File("PracticaFinalFicheros_NarváezLobatoJeremy/PLANTAS");
-	    
-	    if (!carpetaPlantas.exists()) {
-	        
-	    	System.out.println("La carpeta de plantas no existe.");
-	        return;
-	    
-	    }
+        try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(archivoBaja))) {
+          
+        	encoder.writeObject(listaBajas);
+        
+        } catch (IOException e) {
+           
+        	e.printStackTrace();
+        
+        }
 
-	    System.out.println("Ingrese el ID de la planta a dar de baja:");
-	    int idPlanta = entrada.nextInt();
-	    entrada.nextLine();
+        System.out.println("Planta dada de baja y guardada en: " + archivoBaja.getPath());
+    
+    }
 
-	    Plantas plantaSeleccionada = GestorPlantas.buscaPlantaID(idPlanta);
-	    
-	    if (plantaSeleccionada == null) {
-	        
-	    	System.out.println("Error, planta no encontrada.");
-	        return;
-	    
-	    }
+    public static void darAltaPlantas(Scanner entrada) {
+        
+    	File archivoBaja = new File(BAJA_DIR, "plantasBaja.xml");
+       
+        if (!archivoBaja.exists() || archivoBaja.length() == 0) {
+           
+        	System.out.println("❌ No hay plantas en baja para dar de alta.");
+            
+            return;
+        
+        }
 
-	    PlantasBaja_Alta plantaBaja = new PlantasBaja_Alta(
-	        plantaSeleccionada.getCodigo(),
-	        plantaSeleccionada.getNombre(),
-	        plantaSeleccionada.getFoto(),
-	        plantaSeleccionada.getDescripcion(),
-	        plantaSeleccionada.getPrecio(),
-	        plantaSeleccionada.getStock()
-	    );
+        ArrayList<PlantasBaja_Alta> listaBajas;
+       
+        try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(archivoBaja))) {
+            
+        	listaBajas = (ArrayList<PlantasBaja_Alta>) decoder.readObject();
+        
+        } catch (Exception e) {
+           
+        	System.out.println("❌ Error al leer plantas en baja.");
+            e.printStackTrace();
+           
+            return;
+        
+        }
 
-	    ArrayList<PlantasBaja_Alta> listaBajas = new ArrayList<>();
-	    File plantasBajaXML = new File(carpetaPlantas, "plantasBaja.xml");
+        System.out.println("Plantas en baja:");
+        
+        for (PlantasBaja_Alta p : listaBajas) {
+           
+        	System.out.printf("%d - %s (Stock: %d, Precio: %.2f)\n", p.getCodigo(), p.getNombre(), p.getStock(), p.getPrecio());
+       
+        }
 
-	    if (plantasBajaXML.exists() && plantasBajaXML.length() > 0) {
-	        
-	    	try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(plantasBajaXML))) {
-	            listaBajas = (ArrayList<PlantasBaja_Alta>) decoder.readObject();
-	        
-	    	} catch (IOException e) {
-	           
-	    		e.printStackTrace();
-	        
-	    	}
-	    
-	    }
+        System.out.print("Ingrese el ID de la planta a dar de alta: ");
+        int id = entrada.nextInt();
+        entrada.nextLine();
 
-	    listaBajas.add(plantaBaja);
+        PlantasBaja_Alta seleccionada = null;
+        
+        for (PlantasBaja_Alta p : listaBajas) {
+            
+        	if (p.getCodigo() == id) {
+               
+            	seleccionada = p;
+                
+                break;
+           
+            }
+        
+        }
 
-	    try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(plantasBajaXML))) {
-	        
-	    	encoder.writeObject(listaBajas);
-	    
-	    } catch (IOException e) {
-	       
-	    	e.printStackTrace();
-	    
-	    }
+        if (seleccionada == null) {
+           
+        	System.out.println("❌ No se encontró ninguna planta con ese ID.");
+            return;
+        
+        }
 
-	    listaBajas.remove(plantaSeleccionada);
+        Plantas nueva = new Plantas(
+                seleccionada.getCodigo(),
+                seleccionada.getNombre(),
+                seleccionada.getFoto(),
+                seleccionada.getDescripcion(),
+                seleccionada.getPrecio(),
+                seleccionada.getStock()
+        
+        		);
 
-	    GestorPlantas.guardarPlantasXML();
+        GestorPlantas.listaPlantas.add(nueva);
+        GestorPlantas.guardarPlantasXML();
+        GestorPlantas.guardarPlantasDat();
 
-	    GestorPlantas.guardarPlantasDat();
+        listaBajas.remove(seleccionada);
+        
+        try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(archivoBaja))) {
+            encoder.writeObject(listaBajas);
+        
+        }catch(IOException e) {
+        	
+        	e.printStackTrace();
+        	
+        }
 
-	    System.out.println("Planta dada de baja correctamente.");
-	}
+        System.out.println("Planta dada de alta correctamente: " + seleccionada.getNombre());
+    }
 
-	
 }
+

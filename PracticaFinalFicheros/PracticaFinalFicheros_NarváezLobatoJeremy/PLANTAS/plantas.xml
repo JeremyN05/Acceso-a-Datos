@@ -1,37 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <plantas>
-    <planta>
-        <codigo>1</codigo>
-        <nombre>Rosa</nombre>
-        <tipo>Flor</tipo>
-        <foto>rosa.jpg</foto>
-        <descripcion>Flor roja muy común en jardines.</descripcion>
-    </planta>
-    <planta>
-        <codigo>2</codigo>
-        <nombre>Tulipán</nombre>
-        <tipo>Flor</tipo>
-        <foto>tulipan.jpg</foto>
-        <descripcion>Flor colorida originaria de los Países Bajos.</descripcion>
-    </planta>
-    <planta>
-        <codigo>3</codigo>
-        <nombre>Cactus</nombre>
-        <tipo>Suculenta</tipo>
-        <foto>cactus.jpg</foto>
-        <descripcion>Planta resistente de zonas áridas.</descripcion>
-    </planta>
-    <planta>
-        <codigo>4</codigo>
-        <nombre>Girasol</nombre>
-        <tipo>flor de jardin</tipo>
-        <foto>girasol.jpg</foto>
-        <descripcion>Planta alta con grandes flores amarillas.</descripcion>
-    </planta>
-    <planta>
-        <codigo>5</codigo>
-        <nombre>Lavanda</nombre>
-        <tipo>flor de jardin</tipo>
-        <foto>margarita.jpg</foto>
-        <descripcion>Flor blanca con centro amarillo.</descripcion>
-    </planta>
+  <planta>
+    <codigo>1</codigo>
+    <nombre>Rosa</nombre>
+    <foto>rosa.jpg</foto>
+    <descripcion>Flor roja muy común en jardines.</descripcion>
+  </planta>
+  <planta>
+    <codigo>2</codigo>
+    <nombre>Tulipán</nombre>
+    <foto>tulipan.jpg</foto>
+    <descripcion>Flor colorida originaria de los Países Bajos.</descripcion>
+  </planta>
+  <planta>
+    <codigo>3</codigo>
+    <nombre>Cactus</nombre>
+    <foto>cactus.jpg</foto>
+    <descripcion>Planta resistente de zonas áridas.</descripcion>
+  </planta>
+  <planta>
+    <codigo>4</codigo>
+    <nombre>Girasol</nombre>
+    <foto>girasol.jpg</foto>
+    <descripcion>Planta alta con grandes flores amarillas.</descripcion>
+  </planta>
+  <planta>
+    <codigo>5</codigo>
+    <nombre>Margarita</nombre>
+    <foto>margarita.jpg</foto>
+    <descripcion>Flor blanca con centro amarillo.</descripcion>
+  </planta>
 </plantas>
