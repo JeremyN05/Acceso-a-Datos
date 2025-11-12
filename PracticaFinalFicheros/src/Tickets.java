@@ -1,6 +1,5 @@
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -23,12 +22,12 @@ public class Tickets {
 
 	    if (!archivoTicket.exists()) {
 	        
-	    	System.out.println("❌ El ticket con ID " + idTicket + " no existe.");
+	    	System.out.println(" El ticket con ID " + idTicket + " no existe.");
 	        return new ArrayList<>();
 	    
 	    }
 
-	    System.out.println("\n----- 📄 TICKET " + idTicket + " -----");
+	    System.out.println("\n-----  TICKET " + idTicket + " -----");
 
 	    try (Scanner lector = new Scanner(archivoTicket)) {
 	        
@@ -40,7 +39,7 @@ public class Tickets {
 	    
 	    } catch (IOException e) {
 	       
-	    	System.out.println("⚠️ Error al leer el ticket.");
+	    	System.out.println(" Error al leer el ticket.");
 	        e.printStackTrace();
 	    
 	    }
@@ -129,8 +128,8 @@ public class Tickets {
 		if (archivos != null) {
 		    
 			for (File f : archivos) {
-		        String nombre = f.getName();
-
+		        
+				String nombre = f.getName();
 
 		        if (nombre.endsWith(".txt")) {
 		            
@@ -162,7 +161,11 @@ public class Tickets {
 	    int numeroTicket = ticketSiguiente();
 
 	    File carpetaTickets = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS");
-	    if (!carpetaTickets.exists()) carpetaTickets.mkdirs();
+	    if (!carpetaTickets.exists()) {
+	    	
+	    	carpetaTickets.mkdirs();
+	    	
+	    }
 
 	    File archivoTicket = new File(carpetaTickets, numeroTicket + ".txt");
 
@@ -170,20 +173,20 @@ public class Tickets {
 	    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	    float totalLinea = cantidad * precioUnitario;
 
-	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoTicket))) {
+	    try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTicket))) {
 
-	        writer.write("==================================== TICKET DE COMPRA ====================================\n");
-	        writer.write("Número Ticket: " + numeroTicket + "\n");
-	        writer.write("Empleado: " + e.getNombre() + " (ID: " + e.getIdentificacion() + ")\n");
-	        writer.write("Cargo: " + e.getCargo() + "\n");
-	        writer.write("Fecha de venta: " + fechaVenta.format(formato) + "\n");
-	        writer.write("-------------------------------------------------------------------------------\n");
-	        writer.write("LINEAS DE PRODUCTOS\n"); // MARCA de inicio de productos
-	        writer.write(String.format("%-10s %-10s %-10s %-10s\n", "Código", "Cant", "Precio", "Total"));
-	        writer.write(String.format("%-10d %-10d %-10.2f %-10.2f\n", idProducto, cantidad, precioUnitario, totalLinea));
-	        writer.write("-------------------------------------------------------------------------------\n");
-	        writer.write(String.format("TOTAL FINAL: %.2f €\n", totalLinea));
-	        writer.write("===============================================================================\n");
+	        bw.write("==================================== TICKET DE COMPRA ====================================\n");
+	        bw.write("Número Ticket: " + numeroTicket + "\n");
+	        bw.write("Empleado: " + e.getNombre() + " (ID: " + e.getIdentificacion() + ")\n");
+	        bw.write("Cargo: " + e.getCargo() + "\n");
+	        bw.write("Fecha de venta: " + fechaVenta.format(formato) + "\n");
+	        bw.write("-------------------------------------------------------------------------------\n");
+	        bw.write("LINEAS DE PRODUCTOS\n");
+	        bw.write(String.format("%-10s %-10s %-10s %-10s\n", "Código", "Cant", "Precio", "Total"));
+	        bw.write(String.format("%-10d %-10d %-10.2f %-10.2f\n", idProducto, cantidad, precioUnitario, totalLinea));
+	        bw.write("-------------------------------------------------------------------------------\n");
+	        bw.write(String.format("TOTAL FINAL: %.2f €\n", totalLinea));
+	        bw.write("===============================================================================\n");
 
 	        System.out.println("Ticket creado correctamente.");
 	        

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -404,21 +405,25 @@ public class GestorPlantas {
 	    	e.printStackTrace();
 	    
 	    }
+	
 	}
 	
 	 public static void crearPlantasDat(float precioPorDefecto, int stockPorDefecto) {
 		 
 		 File archivoXml = new File(PLANTAS_DIR + File.separator + "plantas.xml");
-		    File archivoDat = new File(PLANTAS_DIR + File.separator + "plantas.dat");
+		 File archivoDat = new File(PLANTAS_DIR + File.separator + "plantas.dat");
 
 		    if (!archivoXml.exists()) {
-		        System.out.println("No se encontró el archvio plantas.xml");
+		        
+		    	System.out.println("No se encontró el archvio plantas.xml");
 		        return;
+		    
 		    }
 
 		    if (archivoDat.exists()) {
-		        System.out.println("El archivo plantas.dat ya existe");
+		       System.out.println("El archivo plantas.dat ya existe");
 		        return;
+		   
 		    }
 
 		    try {
@@ -429,6 +434,7 @@ public class GestorPlantas {
 		        ArrayList<Plantas> listaDatos = new ArrayList<>();
 
 		        for (int i = 0; i < nodos.getLength(); i++) {
+		        	
 		            Element e = (Element) nodos.item(i);
 		            int codigo = Integer.parseInt(e.getElementsByTagName("codigo").item(0).getTextContent());
 		            String nombre = e.getElementsByTagName("nombre").item(0).getTextContent();
@@ -494,8 +500,7 @@ public class GestorPlantas {
 	
 	public static void CrearPlantas() {
 		
-		String ruta = "PracticaFinalFicheros_NarváezLobatoJeremy"
-                + File.separator + "PLANTAS" + File.separator + "plantas.xml";
+		String ruta = "PracticaFinalFicheros_NarváezLobatoJeremy" + File.separator + "PLANTAS" + File.separator + "plantas.xml";
         
         File archivo = new File(ruta);
         
@@ -559,67 +564,84 @@ public class GestorPlantas {
 
 	
 	public static void mostrarPlantas() {
-		
-		 try {
-			 
-			 // Leer XML   
-			 File fichero = new File(PLANTAS_DIR + File.separator + "plantas.xml");
-		        
-			 Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fichero);
-		        
-			 NodeList lista = doc.getElementsByTagName("planta");
+	    try {
+	        // 1️⃣ Leer XML
+	        File ficheroXML = new File(PLANTAS_DIR + File.separator + "plantas.xml");
+	        
+	        if (!ficheroXML.exists()) {
+	            
+	        	System.out.println("No existe el archivo plantas.xml");
+	            
+	        	return;
+	        
+	        }
 
-		     listaPlantas.clear();
+	        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ficheroXML);
+	        NodeList lista = doc.getElementsByTagName("planta");
 
-		     for (int i = 0; i < lista.getLength(); i++) {
-		        
-		    	 Element e = (Element) lista.item(i);
-		           
-		    	 int codigo = Integer.parseInt(e.getElementsByTagName("codigo").item(0).getTextContent());
-		         String nombre = e.getElementsByTagName("nombre").item(0).getTextContent();
-		         String foto = e.getElementsByTagName("foto").item(0).getTextContent();
-		         String descripcion = e.getElementsByTagName("descripcion").item(0).getTextContent();
+	        listaPlantas.clear();
 
-		         // Inicializamos precio y stock
-		         listaPlantas.add(new Plantas(codigo, nombre, foto, descripcion, 0f, 0));
-		        
-		     }
+	        for (int i = 0; i < lista.getLength(); i++) {
+	            
+	        	Element e = (Element) lista.item(i);
 
-		        // Leer plantas.dat
-		        ArrayList<Plantas> listaDatos;
-		        
-		        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PLANTAS_DIR + File.separator + "plantas.dat"))){
-		            
-		        	listaDatos = (ArrayList<Plantas>) ois.readObject();
-		        
-		        }
+	            int codigo = Integer.parseInt(e.getElementsByTagName("codigo").item(0).getTextContent());
+	            String nombre = e.getElementsByTagName("nombre").item(0).getTextContent();
+	            String foto = e.getElementsByTagName("foto").item(0).getTextContent();
+	            String descripcion = e.getElementsByTagName("descripcion").item(0).getTextContent();
 
-		        // Combinar datos     
-		        for (Plantas xmlPlanta : listaPlantas) {
-		            
-		        	for (Plantas datPlanta : listaDatos) {
-		                
-		        		if (xmlPlanta.getCodigo() == datPlanta.getCodigo()) {
-		        			xmlPlanta.setPrecio(datPlanta.getPrecio());
-		                    xmlPlanta.setStock(datPlanta.getStock());
-		                    
-		                    break;
-		                }
-		            }
-		        }
 
-		        for (Plantas p : listaPlantas) {
-		        	
-		            System.out.println(p);
-		            
-		        }
+	            listaPlantas.add(new Plantas(codigo, nombre, foto, descripcion, 0f, 0));
+	        
+	        }
+	        
+	        File plantasDAT = new File(PLANTAS_DIR + File.separator + "plantas.dat");
+	        
+	        if (plantasDAT.exists() && plantasDAT.length() > 0) {
+	            
+	        	try (RandomAccessFile raf = new RandomAccessFile(plantasDAT, "r")) {
+	                
+	            	while (raf.getFilePointer() < raf.length()) {
+	                    
+	                	if (raf.length() - raf.getFilePointer() < Integer.BYTES + Float.BYTES + Integer.BYTES) {
+	                        
+	                    	break; // evitar EOFException
+	                    
+	                    }
 
-		    } catch (Exception e) {
-		    	
-		        e.printStackTrace();
-		        
-		    }
+	                    int codigo = raf.readInt();
+	                    float precio = raf.readFloat();
+	                    int stock = raf.readInt();
 
-	}
+	                    for (Plantas p : listaPlantas) {
+	                        
+	                    	if (p.getCodigo() == codigo) {
+	                            p.setPrecio(precio);
+	                            p.setStock(stock);
+	                            
+	                            break;
+	                        
+	                    	}
+	                    
+	                    }
+	                }
+	            
+	            }
+	        
+	        }
+
+	        for (Plantas p : listaPlantas) {
+	           
+	        	System.out.println(p);
+	        
+	        }
+	    
+	    } catch (Exception e) {
+	     
+	    	e.printStackTrace();
+	    
+	    }
 	
+	}
+
 }

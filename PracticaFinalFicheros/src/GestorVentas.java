@@ -29,7 +29,12 @@ public class GestorVentas {
 				cantidad = entrada.nextInt();
 				entrada.nextLine();
 			
-				GestorPlantas.comprobarCantidad(id, cantidad);
+				if (!GestorPlantas.comprobarCantidad(id, cantidad)) {
+				    
+					System.out.println("Compra cancelada por falta de stock.");
+				    return;
+				
+				}
 			
 				System.out.println("¿Está seguro de realizar esta compra (S/N)?");
 				confirmacion = entrada.nextLine();

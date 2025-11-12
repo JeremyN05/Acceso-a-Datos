@@ -183,6 +183,8 @@ public class GestorEmpleados {
 	}
 	
 	public static void recuperarEmpleadoBaja() {
+		
+		mostrarEmpleadosBaja();
 	    
 	    System.out.println("Introduce el ID del empleado a recuperar:");
 	    int id = entrada.nextInt();

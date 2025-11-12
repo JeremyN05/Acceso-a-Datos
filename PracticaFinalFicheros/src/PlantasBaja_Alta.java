@@ -1,17 +1,25 @@
 
-public class PlantasBaja_Alta {
+public class PlantasBaja_Alta{
 
 	private int codigo;
 	private String nombre;
+	private String foto;
+	private String descripcion;
 	private float precio;
 	private int stock;
 	
-	public PlantasBaja_Alta(int codigo, String nombre, float precio, int stock) {
+	public PlantasBaja_Alta(int codigo, String nombre, String foto, String descripcion, float precio, int stock) {
 		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
+		this.foto = foto;
+		this.descripcion = descripcion;
 		this.precio = precio;
 		this.stock = stock;
+	}
+	
+	public PlantasBaja_Alta() {
+		
 	}
 
 	public int getCodigo() {
@@ -28,6 +36,22 @@ public class PlantasBaja_Alta {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public float getPrecio() {
@@ -48,7 +72,8 @@ public class PlantasBaja_Alta {
 
 	@Override
 	public String toString() {
-		return String.format( "%-15s %-15s %15.2f %8d", codigo, nombre, precio, stock);
+		return "PlantasBaja_Alta [codigo=" + codigo + ", nombre=" + nombre + ", foto=" + foto + ", descripcion="
+				+ descripcion + ", precio=" + precio + ", stock=" + stock + "]";
 	}
 	
 }
