@@ -1,3 +1,5 @@
+/GestorBaja_AltaPlantas.class
+/GestorDevoluciones.class
 /GestorEmpleados.class
 /GestorPlantas.class
 /GestorVentas.class
@@ -6,11 +8,7 @@
 /Main.class
 /Menu.class
 /Plantas.class
+/PlantasBaja_Alta.class
 /Sesion.class
 /Ticket.class
 /Tickets.class
-/Devoluciones.class
-/GestorDevoluciones.class
-/PlantasBaja.class
-/GestorBaja_AltaPlantas.class
-/PlantasBaja_Alta.class
