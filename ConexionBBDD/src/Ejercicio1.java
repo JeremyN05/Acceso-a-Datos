@@ -273,7 +273,7 @@ public class Ejercicio1 {
 			opcion = entrada.nextInt();
 			entrada.nextLine();
 			
-		}while(opcion > 5);
+		}while(opcion < 1 || opcion > 5);
 		
 		switch (opcion) {
 		
@@ -294,7 +294,7 @@ public class Ejercicio1 {
 			
 		case 4:
 			
-			
+			añadirJugador(entrada);
 			break;
 			
 		case 5:
