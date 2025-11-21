@@ -1,10 +1,11 @@
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class MenuJuguete {
 
 	private static Scanner entrada = new Scanner(System.in);
 	
-	public static void mostrarMenuJuguetes() {
+	public static void mostrarMenuJuguetes(Connection conexion) {
 		
 		int opcionJuguetes = 0;
 		
