@@ -6,9 +6,7 @@ import java.util.Scanner;
 
 public class Ejercicio1 {
 
-	public static Scanner entrada = new Scanner(System.in);
-
-	public static void añadirJugador(Scanner entrada) {
+	public static void añadirJugador(Scanner entrada ) {
 	
 	String url = "jdbc:mysql://localhost:3306/nba";
 	String usuario = "root";

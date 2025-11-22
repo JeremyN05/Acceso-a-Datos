@@ -13,8 +13,10 @@ public class Main {
 		        int opcion = 0;
 
 		        do {
-		            System.out.println("               MENÚS               ");
-		            System.out.println("-----------------------------------");
+		        	
+		        	System.out.println("--------------------------------------------------------");
+		            System.out.println("---------------BIENVENIDO A LA JUGUETERIA---------------");
+		            System.out.println("--------------------------------------------------------");
 
 		            System.out.println("1. Menú juguetes");
 		            System.out.println("2. Menú empleado");
@@ -31,7 +33,7 @@ public class Main {
 		        switch (opcion) {
 
 		            case 1:
-		                MenuJuguete.mostrarMenuJuguetes(conexion);
+		                MenuJuguete.mostrarMenuJuguetes(conexion, entrada);
 		                break;
 
 		            case 2:
@@ -45,8 +47,6 @@ public class Main {
 		            default:
 		                break;
 		        }
-
-		        conexion.close();
 
 		    } catch (Exception e) {
 		        e.printStackTrace();

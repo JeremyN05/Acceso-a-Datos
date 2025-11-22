@@ -2,10 +2,8 @@ import java.sql.Connection;
 import java.util.Scanner;
 
 public class MenuJuguete {
-
-	private static Scanner entrada = new Scanner(System.in);
 	
-	public static void mostrarMenuJuguetes(Connection conexion) {
+	public static void mostrarMenuJuguetes(Connection conexion, Scanner entrada) {
 		
 		int opcionJuguetes = 0;
 		
@@ -24,6 +22,33 @@ public class MenuJuguete {
 			entrada.nextLine();
 			
 		}while(opcionJuguetes < 1 || opcionJuguetes > 4);
+		
+		switch (opcionJuguetes) {
+		
+		case 1:
+			
+			GestorJuguetes.crearJuguete(conexion, entrada);
+			break;
+			
+		case 2:
+			
+			GestorJuguetes.modificarJuguetes(conexion, entrada);
+			break;
+			
+		case 3:
+			
+			GestorJuguetes.eliminarJuguete(conexion, entrada);
+			break;
+			
+		case 4:
+			
+			System.out.println("Saliendo del programa....");
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 	
 }
