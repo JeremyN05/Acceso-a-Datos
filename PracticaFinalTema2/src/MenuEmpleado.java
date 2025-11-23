@@ -5,7 +5,7 @@ public class MenuEmpleado {
 	
 	private static Scanner entrada = new Scanner(System.in);
 
-	public static void mostrarMenuEmpleado(Connection conexion) {
+	public static void mostrarMenuEmpleado(Connection conexion, Scanner entrada) {
 		
 		int opcionEmpleado = 0;
 		
@@ -25,6 +25,24 @@ public class MenuEmpleado {
 			
 		}while(opcionEmpleado < 1 || opcionEmpleado > 4);
 		
+		switch (opcionEmpleado) {
+		
+		case 1:
+			
+			GestorEmpleados.registrarEmpleado(conexion, entrada);
+			break;
+			
+		case 2:
+			
+			GestorEmpleados.modificarEmpleado(conexion, entrada);
+			break;
+
+		
+		default:
+			break;
+		
+		}
+	
 	}
 		
 }

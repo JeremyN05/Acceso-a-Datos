@@ -37,7 +37,7 @@ public class Main {
 		                break;
 
 		            case 2:
-		                MenuEmpleado.mostrarMenuEmpleado(conexion);
+		                MenuEmpleado.mostrarMenuEmpleado(conexion, entrada);
 		                break;
 
 		            case 3:
