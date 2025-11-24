@@ -26,6 +26,37 @@ public class MenuVentas {
 			
 		}while(opcionVentas < 1 || opcionVentas > 5);
 		
+		switch (opcionVentas) {
+		
+		case 1:
+			
+			GestorVentas.realizarVenta(conexion, entrada);
+			break;
+			
+		case 2:
+			
+			break;
+			
+		case 3:
+			
+			break;
+			
+		case 4:
+			
+			break;
+			
+		case 5:
+			
+			System.out.println("Saliendo del programa");
+			System.exit(0);
+			break;
+
+		default:
+			System.out.println("Error, opcion introducido incorrecto.");
+			break;
+		
+		}
+		
 	}
 	
 }

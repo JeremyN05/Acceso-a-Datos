@@ -6,6 +6,91 @@ import java.util.Scanner;
 
 public class GestorJuguetes {
 	
+	public static int comprobarStock(Connection conexion, int id) {
+
+	    if (conexion == null) {
+	      
+	    	System.out.println("No se pudo establecer la conexión con la base de datos.");
+	        return -2;
+	    
+	    }
+
+	    String consulta = "SELECT Cantidad_en_stock FROM Juguete WHERE ID_Juguete = ?";
+
+	    try {
+
+	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        sentencia.setInt(1, id);
+
+	        ResultSet resultado = sentencia.executeQuery();
+
+	        if (!resultado.next()) {
+	       
+	        	System.out.println("No se encontró ningún juguete con ese ID.");
+	            return -1;
+	       
+	        }
+
+	        int stock = resultado.getInt("Cantidad_en_stock");
+	        System.out.println("Stock disponible: " + stock);
+
+	        return stock;
+
+	    } catch (SQLException e) {
+	     
+	    	e.printStackTrace();
+	        return -2;
+	   
+	    }
+	
+	}
+	
+	public static int comprobarIDJuguete(Connection conexion, int id) {
+
+	    if (conexion == null) {
+	       
+	    	System.out.println("No se pudo establecer la conexión con la base de datos.");
+	        return -1;
+	   
+	    }
+
+	    String consulta = "SELECT * FROM Juguete WHERE ID_Juguete = ?";
+
+	    try {
+
+	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        sentencia.setInt(1, id);
+
+	        ResultSet resultado = sentencia.executeQuery();
+
+	        if (!resultado.next()) {
+	          
+	        	System.out.println("No se encontró ningún juguete con ese ID.");
+	            return -1;
+	       
+	        }
+
+	        System.out.printf("Juguete encontrado: ID: %d, Nombre: %s, Descripcion: %s, Precio: %.2f, Stock: %d, Categoria: %s %n",
+	               
+	        		resultado.getInt("ID_Juguete"),
+	                resultado.getString("Nombre"),
+	                resultado.getString("Descripcion"),
+	                resultado.getDouble("Precio"),
+	                resultado.getInt("Cantidad_en_stock"),
+	                resultado.getString("Categoria")
+	        );
+
+	        return id;
+
+	    } catch (SQLException e) {
+	       
+	    	e.printStackTrace();
+	        return -1;
+	    
+	    }
+	
+	}
+	
 	public static void eliminarJuguete(Connection conexion, Scanner entrada) {
 
 	    if (conexion == null) {
