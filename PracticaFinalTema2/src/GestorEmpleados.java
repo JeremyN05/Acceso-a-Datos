@@ -26,7 +26,8 @@ public class GestorEmpleados {
 	    String consulta = "SELECT * FROM empleado WHERE ID_Empleado = ?";
 
 	    try {
-	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        
+	    	PreparedStatement sentencia = conexion.prepareStatement(consulta);
 	        sentencia.setInt(1, codigo);
 
 	        ResultSet resultado = sentencia.executeQuery();
@@ -44,8 +45,10 @@ public class GestorEmpleados {
 	            System.out.printf("%-15s %-20s %-20s %-20s%n\n", id, nombre, cargo, fecha);
 
 	        } else {
-	            System.out.println("No existe un empleado con ese ID.");
+	         
+	        	System.out.println("No existe un empleado con ese ID.");
 	            return;
+	       
 	        }
 
 	        System.out.println("Ingrese la nueva fecha de ingreso (YYYY-MM-DD):");
@@ -54,10 +57,14 @@ public class GestorEmpleados {
 	        java.sql.Date fechaNueva;
 
 	        try {
-	            fechaNueva = java.sql.Date.valueOf(fechaStr);
+	        
+	        	fechaNueva = java.sql.Date.valueOf(fechaStr);
+	        
 	        } catch (IllegalArgumentException e) {
-	            System.out.println("Formato inválido. Debe ser YYYY-MM-DD.");
+	        
+	        	System.out.println("Formato inválido. Debe ser YYYY-MM-DD.");
 	            return;
+	        
 	        }
 
 	        String consulta2 = "UPDATE empleado SET Fecha_ingreso = ? WHERE ID_Empleado = ?";
@@ -70,26 +77,36 @@ public class GestorEmpleados {
 	            int filasAfectadas = sentencia2.executeUpdate();
 
 	            if (filasAfectadas > 0) {
-	                System.out.println("Empleado actualizado correctamente.");
+	            
+	            	System.out.println("Empleado actualizado correctamente.");
+	           
 	            } else {
-	                System.out.println("No se pudo actualizar el empleado.");
+	           
+	            	System.out.println("No se pudo actualizar el empleado.");
+	           
 	            }
 
 	        } catch (SQLException e) {
-	            e.printStackTrace();
+	          
+	        	e.printStackTrace();
+	        
 	        }
 
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	     
+	    
+	    	e.printStackTrace();
 	    }
+	
 	}
-
 	
 	private static void modificarCargo(Connection conexion, Scanner entrada) {
 	    
 	    if (conexion == null) {
-	        System.out.println("No se pudo establecer la conexión con la base de datos.");
+	      
+	    	System.out.println("No se pudo establecer la conexión con la base de datos.");
 	        return;
+	    
 	    }
 
 	    int codigo = 0;
