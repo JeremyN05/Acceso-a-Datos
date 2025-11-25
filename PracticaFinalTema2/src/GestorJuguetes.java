@@ -94,32 +94,26 @@ public class GestorJuguetes {
 	public static void eliminarJuguete(Connection conexion, Scanner entrada) {
 
 	    if (conexion == null) {
-	        
-	    	System.out.println("No se pudo establecer la conexión con la base de datos.");
+	        System.out.println("No se pudo establecer la conexión con la base de datos.");
 	        return;
-	    
 	    }
 
 	    int codigo = 0;
 
 	    System.out.println("Introduce el ID del juguete a eliminar:");
 	    codigo = entrada.nextInt();
-	    entrada.nextLine(); // limpiar buffer
+	    entrada.nextLine();
 
 	    String consulta = "SELECT * FROM Juguete WHERE ID_Juguete = ?";
 
 	    try {
-	        
-	    	PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
 	        sentencia.setInt(1, codigo);
-
 	        ResultSet resultado = sentencia.executeQuery();
 
 	        if (!resultado.next()) {
-	           
-	        	System.out.println("No se encontró ningún juguete con ese ID.");
+	            System.out.println("No se encontró ningún juguete con ese ID.");
 	            return;
-	        
 	        }
 
 	        System.out.printf("Juguete a eliminar: ID=%d, Nombre=%s, Descripcion=%s, Precio=%.2f, Stock=%d, Categoria=%s%n",
@@ -133,45 +127,44 @@ public class GestorJuguetes {
 
 	        System.out.println("¿Está seguro de eliminar este juguete? (S/N)");
 	        String confirmacion = entrada.nextLine().trim().toUpperCase();
-	        
+
 	        if (!confirmacion.equals("S")) {
-	           
+	          
 	        	System.out.println("Eliminación cancelada.");
 	            return;
-
+	       
 	        }
 
 	        String consultaEliminar = "DELETE FROM juguete WHERE ID_Juguete = ?";
-
 	        try (PreparedStatement sentencia2 = conexion.prepareStatement(consultaEliminar)) {
-	          
+	           
 	        	sentencia2.setInt(1, codigo);
-
 	            int filasAfectadas = sentencia2.executeUpdate();
-	           
+
 	            if (filasAfectadas > 0) {
-	                System.out.println("Juguete eliminado correctamente.");
 	           
+	            	System.out.println("Juguete eliminado correctamente.");
+	          
 	            } else {
-	           
+	          
 	            	System.out.println("No se pudo eliminar el juguete.");
 	           
 	            }
 
 	        } catch (SQLException e) {
-	       
+	        
 	        	e.printStackTrace();
-	       
+	        
 	        }
 
 	    } catch (SQLException e) {
 	     
 	    	e.printStackTrace();
-	    
+	   
 	    }
 	
 	}
-	
+
 	private static void modificarCategoriaJuguete(Connection conexion, Scanner entrada) {
 
 	    if (conexion == null) {
@@ -269,35 +262,31 @@ public class GestorJuguetes {
 	private static void modificarStockJuguete(Connection conexion, Scanner entrada) {
 
 	    if (conexion == null) {
-	        
-	    	System.out.println("No se pudo establecer la conexión con la base de datos.");
+	        System.out.println("No se pudo establecer la conexión con la base de datos.");
 	        return;
 	    }
 
 	    int codigo = 0;
 	    int nuevoStock = -1;
 
-	    System.out.println("Introduce el ID del juguete a modificar:\n");
+	    System.out.println("Introduce el ID del juguete a modificar:");
 	    codigo = entrada.nextInt();
 	    entrada.nextLine();
 
-	    System.out.println("Juguete elegido:\n");
+	    System.out.println("Juguete elegido:");
 
 	    String consulta = "SELECT * FROM juguete WHERE ID_Juguete = ?";
 
 	    try {
-	        
-	    	PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
 	        sentencia.setInt(1, codigo);
-
 	        ResultSet resultado = sentencia.executeQuery();
 
 	        System.out.printf("%-15s %-20s %-20s %-10s %-10s %-15s%n", "ID", "Nombre", "Descripcion", "Precio", "Stock", "Categoria");
 	        System.out.println("---------------------------------------------------------------------------------------------------");
 
 	        while (resultado.next()) {
-	           
-	        	int id = resultado.getInt("ID_Juguete");
+	            int id = resultado.getInt("ID_Juguete");
 	            String nombre = resultado.getString("Nombre");
 	            String descripcion = resultado.getString("Descripcion");
 	            double precio = resultado.getDouble("Precio");
@@ -305,68 +294,63 @@ public class GestorJuguetes {
 	            String categoria = resultado.getString("Categoria");
 
 	            System.out.printf("%-15s %-20s %-20s %-10.2f %-10s %-15s%n", id, nombre, descripcion, precio, stock, categoria);
-	       
 	        }
 
 	        while (nuevoStock < 0) {
-	           
-	        	try {
-	        		
-	        		System.out.println("\n");
-	            	System.out.println("Ingrese el nuevo stock del juguete:");
+	            try {
+	                System.out.println("Ingrese el nuevo stock del juguete:");
 	                nuevoStock = Integer.parseInt(entrada.nextLine());
-	              
+
 	                if (nuevoStock < 0) {
-	                	
-	                	System.out.println("\n");
-	                	System.out.println("El stock no puede ser negativo. Intente nuevamente.");
-	                
+	                    System.out.println("El stock no puede ser negativo. Intente nuevamente.");
 	                }
-	           
 	            } catch (NumberFormatException e) {
-	              
-	            	System.out.println("\n");
-	            	System.out.println("Stock inválido. Introduzca un número entero válido.");
-	            
+	                System.out.println("Stock inválido. Introduzca un número entero válido.");
 	            }
-	       
 	        }
 
-	        String consulta2 = "UPDATE juguete SET Cantidad_en_stock = ? WHERE ID_Juguete = ?";
+	        // Pedir stand y zona
+	        System.out.println("Ingrese el ID del stand:");
+	        int idStand = entrada.nextInt();
+	        entrada.nextLine();
+	        System.out.println("Ingrese el ID de la zona:");
+	        int idZona = entrada.nextInt();
+	        entrada.nextLine();
 
-	        try (PreparedStatement sentencia2 = conexion.prepareStatement(consulta2)) {
-	          
-	        	sentencia2.setInt(1, nuevoStock);
+	        // Actualizar stock en la tabla juguete
+	        String consultaJuguete = "UPDATE juguete SET Cantidad_en_stock = ? WHERE ID_Juguete = ?";
+	        try (PreparedStatement sentencia2 = conexion.prepareStatement(consultaJuguete)) {
+	            sentencia2.setInt(1, nuevoStock);
 	            sentencia2.setInt(2, codigo);
-
 	            int filasAfectadas = sentencia2.executeUpdate();
-
 	            if (filasAfectadas > 0) {
-	           
-	            	System.out.println("\n");
-	            	System.out.println("Stock del juguete actualizado correctamente.");
-	           
+	                System.out.println("Stock del juguete actualizado correctamente en la tabla Juguete.");
 	            } else {
-	           
-	            	System.out.println("\n");
-	            	System.out.println("No se encontró el juguete con ese ID.");
-	           
+	                System.out.println("No se encontró el juguete con ese ID.");
 	            }
+	        }
 
-	        } catch (SQLException e) {
-	           
-	        	e.printStackTrace();
-	        
+	        // Actualizar stock en la tabla stock
+	        String consultaStock = "INSERT INTO stock (ID_Stand, ID_Zona, ID_Juguete, Cantidad_disponible) " +
+	                "VALUES (?, ?, ?, ?) " +
+	                "ON DUPLICATE KEY UPDATE Cantidad_disponible = ?";
+	        try (PreparedStatement sentencia3 = conexion.prepareStatement(consultaStock)) {
+	            sentencia3.setInt(1, idStand);
+	            sentencia3.setInt(2, idZona);
+	            sentencia3.setInt(3, codigo);
+	            sentencia3.setInt(4, nuevoStock);
+	            sentencia3.setInt(5, nuevoStock);
+
+	            sentencia3.executeUpdate();
+	            System.out.println("Stock del juguete actualizado correctamente en la tabla Stock.");
+
 	        }
 
 	    } catch (SQLException e) {
-	        
-	    	e.printStackTrace();
-	    
+	        e.printStackTrace();
 	    }
-	
 	}
-	
+
 	private static void modificarPrecioJuguete(Connection conexion, Scanner entrada) {
 
 	    if (conexion == null) {
@@ -380,7 +364,7 @@ public class GestorJuguetes {
 
 	    System.out.println("Introduce el ID del juguete a modificar:\n");
 	    codigo = entrada.nextInt();
-	    entrada.nextLine(); // Limpiar buffer
+	    entrada.nextLine();
 
 	    System.out.println("Juguete elegido:\n");
 
@@ -696,77 +680,122 @@ public class GestorJuguetes {
 	}
 
 	public static void crearJuguete(Connection conexion, Scanner entrada) {
+
+	    if (conexion == null) {
+	     
+	    	System.out.println("No se pudo establecer la conexión con la base de datos.");
+	        return;
+	   
+	    }
+
+	    try {
+
+	        String nombre, descripcion, categoria;
+	        double precio;
+	        int cantidad_stock = 0;
+	        int idStand = 0;
+	        int idZona = 0;
+
+	        System.out.println("Introduzca el nombre del juguete:");
+	        nombre = entrada.nextLine().trim();
+
+	        System.out.println("Introduzca la descripción del juguete:");
+	        descripcion = entrada.nextLine().trim();
+
+	        System.out.println("Introduzca el precio del juguete:");
+	        precio = Double.parseDouble(entrada.nextLine().replace(",", "."));
+
+	        System.out.println("Introduzca el stock del juguete:");
+	        cantidad_stock = Integer.parseInt(entrada.nextLine());
+
+	        System.out.println("Introduzca la categoría del juguete:");
+	        categoria = entrada.nextLine().trim();
+
+	        String consulta = "INSERT INTO juguete (Nombre, Descripcion, Precio, Cantidad_en_stock, Categoria) VALUES (?, ?, ?, ?, ?)";
+	        PreparedStatement sentencia = conexion.prepareStatement(consulta, PreparedStatement.RETURN_GENERATED_KEYS);
+
+	        sentencia.setString(1, nombre);
+	        sentencia.setString(2, descripcion);
+	        sentencia.setDouble(3, precio);
+	        sentencia.setInt(4, cantidad_stock);
+	        sentencia.setString(5, categoria);
+
+	        int filasAfectadas = sentencia.executeUpdate();
+
+	        if (filasAfectadas > 0) {
+	           
+	        	System.out.println("El juguete se ha creado correctamente.");
+
+	            ResultSet resultado = sentencia.getGeneratedKeys();
+	            int idJuguete = 0;
 	            
-		if (conexion == null) {
-	               
-	       System.out.println("No se pudo establecer la conexión con la base de datos.");
-	               
-	       return;
+	            if (resultado.next()) {
 	            
-	   	}
-		
-		try {
-			
-			String nombre;
-			String descripcion;
-			double precio;
-			int cantidad_stock = 0;
-			String categoria;
-		
-			System.out.println("Introduzca en nombre del juguete:");
-			nombre = entrada.nextLine().trim();
-		
-			System.out.println("Introduzca la descripción del juguete:");
-			descripcion = entrada.nextLine().trim();
-		
-			System.out.println("Introduzca el precio del juguete:");
-			precio = Double.parseDouble(entrada.nextLine().replace(",", "."));
-		
-			System.out.println("Introduzca el stock del juguete:");
-			cantidad_stock = Integer.parseInt(entrada.nextLine());
-			
-			System.out.println("Introduzca la categoria del juguete:");
-			categoria = entrada.nextLine().trim();
-			
-			String consulta = "INSERT INTO juguete (Nombre, Descripcion, Precio, Cantidad_en_stock, Categoria) VALUES ( ?, ?, ?, ?, ?)";
-			
-			try (PreparedStatement sentencia = conexion.prepareStatement(consulta)){
-			
-				try {
-					
-					sentencia.setString(1, nombre);
-					sentencia.setString(2, descripcion);
-					sentencia.setDouble(3, precio);
-					sentencia.setInt(4, cantidad_stock);
-					sentencia.setString(5, categoria);
-			    
-					int filasAfectadas = sentencia.executeUpdate();
-			    
-					if (filasAfectadas > 0) {
-			        
-						System.out.println("El juguete se ha creado correctamente.");
-			    
-					} else {
-			        
-						System.out.println("Error, no se pudo crear el juguete.");
-			    
-					}
-			
-				} catch (SQLException e) {
-				
-					e.printStackTrace();
-			
-				}
-			
-			}
-		
-		}catch(SQLException e) {
-			
-			e.printStackTrace();
-			
-		}
-		
+	            	idJuguete = resultado.getInt(1);
+	           
+	            }
+
+	            System.out.println("\nZonas y stands disponibles:");
+	            String consultaZonasStands = "SELECT s.ID_Stand, z.ID_Zona, s.Nombre AS Stand, z.Nombre AS Zona " + "FROM stand s " + "JOIN zona z ON s.ID_Zona = z.ID_Zona";
+	            
+	            PreparedStatement sentencia2 = conexion.prepareStatement(consultaZonasStands);
+	            ResultSet resultado2 = sentencia2.executeQuery();
+	            
+	            System.out.printf("%-10s %-10s %-20s %-20s%n", "ID_Stand", "ID_Zona", "Stand", "Zona");
+	            System.out.println("--------------------------------------------------------");
+	           
+	            while (resultado2.next()) {
+	               
+	            	System.out.printf("%-10d %-10d %-20s %-20s%n",
+	                
+	            			resultado2.getInt("ID_Stand"),
+	            			resultado2.getInt("ID_Zona"),
+	            			resultado2.getString("Stand"),
+	            			resultado2.getString("Zona"));
+	           
+	            }
+
+	            System.out.println("\nIntroduce el ID del stand donde estará el juguete:");
+	            idStand = entrada.nextInt();
+	            entrada.nextLine();
+
+	            System.out.println("Introduce el ID de la zona donde estará el stand:");
+	            idZona = entrada.nextInt();
+	            entrada.nextLine();
+
+	            String consultaStock = "INSERT INTO stock (ID_Stand, ID_Zona, ID_Juguete, Cantidad_disponible) VALUES (?, ?, ?, ?)";
+	            PreparedStatement sentenciaStock = conexion.prepareStatement(consultaStock);
+	            sentenciaStock.setInt(1, idStand);
+	            sentenciaStock.setInt(2, idZona);
+	            sentenciaStock.setInt(3, idJuguete);
+	            sentenciaStock.setInt(4, cantidad_stock);
+
+	            try {
+	            
+	            	sentenciaStock.executeUpdate();
+	                System.out.println("Stock registrado correctamente en el stand y zona seleccionados.");
+	            
+	            } catch (SQLException e) {
+	            
+	            	System.out.println("Error al registrar el stock: revisa que el stand y la zona existan.");
+	                e.printStackTrace();
+	            
+	            }
+
+	        } else {
+	        
+	        	System.out.println("Error, no se pudo crear el juguete.");
+	        
+	        }
+
+	    } catch (SQLException e) {
+	     
+	    	e.printStackTrace();
+	   
+	    }
+
 	}
-		
+
+	
 }
 	

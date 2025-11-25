@@ -9,6 +9,7 @@ public class Main {
 		
 		 try {
 		        Connection conexion = ConexionBBDD.obtenerConexion();
+		        Datos_Iniciales.insertarZonasYStands(conexion);
 
 		        int opcion = 0;
 
