@@ -35,14 +35,17 @@ public class MenuVentas {
 			
 		case 2:
 			
+			GestorVentas.realizarDevolucion(conexion, entrada);
 			break;
 			
 		case 3:
 			
+			GestorVentas.productosMasVendidos(conexion);
 			break;
 			
 		case 4:
 			
+			GestorVentas.empleadosConMasVentas(conexion);
 			break;
 			
 		case 5:

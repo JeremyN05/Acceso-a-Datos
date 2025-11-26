@@ -9,7 +9,7 @@ public class Main {
 		
 		 try {
 		        Connection conexion = ConexionBBDD.obtenerConexion();
-		        Datos_Iniciales.insertarZonasYStands(conexion);
+		        Datos_Iniciales.insertarJuguetesYEmpleados(conexion);
 
 		        int opcion = 0;
 
