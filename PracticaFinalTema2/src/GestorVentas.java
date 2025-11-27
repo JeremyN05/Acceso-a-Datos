@@ -94,13 +94,54 @@ public class GestorVentas {
 
 	public static void realizarDevolucion(Connection conexion, Scanner entrada) {
 
+		if (conexion == null) {
+		       
+			System.out.println("No se pudo establecer la conexión con la base de datos.");
+	        return;
+	   
+		}
+		
 	    try {
 
-	        System.out.println("Introduce el ID del juguete a devolver:");
+	        System.out.println("\n--- JUGUETES DISPONIBLES ---");
+	        String sqlJuguetes = "SELECT ID_Juguete, Nombre, Precio FROM juguete";
+	        
+	        PreparedStatement psJuguetes = conexion.prepareStatement(sqlJuguetes);
+	        
+	        ResultSet resultadoJuguetes = psJuguetes.executeQuery();
+
+	        while (resultadoJuguetes.next()) {
+	           
+	        	System.out.println("ID: " + 
+	        	resultadoJuguetes.getInt("ID_Juguete") + " | Nombre: " + 
+	        	resultadoJuguetes.getString("Nombre") + " | Precio: " + 
+	        	resultadoJuguetes.getDouble("Precio") + "€");
+	       
+	        }
+
+	        System.out.println("\nIntroduce el ID del juguete a devolver:");
 	        int idOriginal = entrada.nextInt();
 	        entrada.nextLine();
 
-	        System.out.println("Introduce el ID del stand de origen:");
+	        System.out.println("\n--- STANDS Y ZONAS DISPONIBLES ---");
+	        String sqlStands = "SELECT s.ID_Stand, s.ID_Zona, st.Nombre AS Stand, z.Nombre AS Zona " +
+	                           "FROM stand st JOIN zona z ON st.ID_Zona = z.ID_Zona " +
+	                           "JOIN stock s ON st.ID_Stand = s.ID_Stand";
+	        
+	        PreparedStatement psStands = conexion.prepareStatement(sqlStands);
+	        
+	        ResultSet resultadoStands = psStands.executeQuery();
+
+	        while (resultadoStands.next()) {
+	           
+	        	System.out.println("Stand: " + 
+	        			resultadoStands.getInt("ID_Stand") + " | Zona: " + 
+	        			resultadoStands.getInt("ID_Zona") + " (" + 
+	        			resultadoStands.getString("Stand") + " - " + 
+	        			resultadoStands.getString("Zona") + ")");
+	        }
+
+	        System.out.println("\nIntroduce el ID del stand de origen:");
 	        int standOrigen = entrada.nextInt();
 	        entrada.nextLine();
 
@@ -108,14 +149,15 @@ public class GestorVentas {
 	        int zonaOrigen = entrada.nextInt();
 	        entrada.nextLine();
 
+
 	        int stockOriginal = GestorStand.comprobarStockEnStand(conexion, idOriginal, standOrigen, zonaOrigen);
-	      
 	        if (stockOriginal <= 0) {
-	            
+
 	        	System.out.println("No hay stock en el stand de origen para devolver.");
 	            return;
-	       
+	        
 	        }
+
 
 	        System.out.println("Cantidad a devolver:");
 	        int cantidad = entrada.nextInt();
@@ -125,59 +167,99 @@ public class GestorVentas {
 	           
 	        	System.out.println("Cantidad no válida. Stock disponible: " + stockOriginal);
 	            return;
-	       
+	        
 	        }
 
 	        double precioOriginal = obtenerPrecioJuguete(conexion, idOriginal);
 
-	        System.out.println("Ingrese el ID del nuevo juguete a cambiar (mismo precio):");
-	        int idNuevo = entrada.nextInt();
-	        entrada.nextLine();
-
-	        double precioNuevo = obtenerPrecioJuguete(conexion, idNuevo);
+	        System.out.println("\n--- JUGUETES DEL MISMO PRECIO (" + precioOriginal + "€) ---");
+	        String sqlCompatibles = "SELECT ID_Juguete, Nombre FROM juguete WHERE Precio = ?";
 	        
-	        if (precioNuevo != precioOriginal) {
-	           
-	        	System.out.println("El nuevo juguete debe tener el mismo precio que el original.");
-	            return;
+	        PreparedStatement psCompatibles = conexion.prepareStatement(sqlCompatibles);
+	        psCompatibles.setDouble(1, precioOriginal);
+	        
+	        ResultSet rsCompatibles = psCompatibles.executeQuery();
+
+	        while (rsCompatibles.next()) {
+	            
+	        	System.out.println("ID: " + 
+	        	rsCompatibles.getInt("ID_Juguete") + " | Nombre: " + 
+	        	rsCompatibles.getString("Nombre"));
 	       
 	        }
 
-	        System.out.println("Ingrese el ID del stand de destino:");
+	        System.out.println("\nIngrese el ID del nuevo juguete a cambiar:");
+	        int idNuevo = entrada.nextInt();
+	        entrada.nextLine();
+
+	        System.out.println("\n--- STANDS DONDE HAY STOCK DEL NUEVO JUGUETE ---");
+	        String sqlStandsNuevo = "SELECT ID_Stand, ID_Zona, Cantidad_disponible " +
+	                                "FROM stock WHERE ID_Juguete = ? AND Cantidad_disponible > 0";
+	        PreparedStatement psStandsNuevo = conexion.prepareStatement(sqlStandsNuevo);
+	        psStandsNuevo.setInt(1, idNuevo);
+	        ResultSet rsStandsNuevo = psStandsNuevo.executeQuery();
+
+	        while (rsStandsNuevo.next()) {
+	            System.out.println("Stand: " + 
+	        rsStandsNuevo.getInt("ID_Stand") + " | Zona: " + 
+	        rsStandsNuevo.getInt("ID_Zona") + " | Stock: " + 
+	        rsStandsNuevo.getInt("Cantidad_disponible"));
+	        }
+
+	        System.out.println("\nIngrese el ID del stand destino:");
 	        int standDestino = entrada.nextInt();
 	        entrada.nextLine();
 
-	        System.out.println("Ingrese el ID de la zona de destino:");
+	        System.out.println("Ingrese el ID de la zona destino:");
 	        int zonaDestino = entrada.nextInt();
 	        entrada.nextLine();
 
-	        System.out.println("Ingrese su ID de empleado:");
+	        System.out.println("\n--- EMPLEADOS DISPONIBLES ---");
+	        String sqlEmpleados = "SELECT ID_Empleado, Nombre FROM empleado";
+	        PreparedStatement psEmpleados = conexion.prepareStatement(sqlEmpleados);
+	        ResultSet rsEmpleados = psEmpleados.executeQuery();
+
+	        while (rsEmpleados.next()) {
+	            System.out.println("Empleado ID: " + 
+	        rsEmpleados.getInt("ID_Empleado") +" | Nombre: " + 
+	        rsEmpleados.getString("Nombre"));
+	        
+	        }
+
+	        System.out.println("\nIngrese su ID de empleado:");
 	        int idEmpleado = entrada.nextInt();
 	        entrada.nextLine();
+
 
 	        System.out.println("Motivo de la devolución:");
 	        String motivo = entrada.nextLine();
 
-	        String consulta = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible - ? " + "WHERE ID_Juguete = ? AND ID_Stand = ? AND ID_Zona = ?";
-	        
-	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        String consulta = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible - ? " +
+	                          "WHERE ID_Juguete = ? AND ID_Stand = ? AND ID_Zona = ?";
 	       
+	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        
 	        sentencia.setInt(1, cantidad);
 	        sentencia.setInt(2, idOriginal);
 	        sentencia.setInt(3, standOrigen);
 	        sentencia.setInt(4, zonaOrigen);
 	        sentencia.executeUpdate();
 
-	        String consulta2 = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible + ? " + "WHERE ID_Juguete = ? AND ID_Stand = ? AND ID_Zona = ?";
-	        PreparedStatement sentencia2 = conexion.prepareStatement(consulta2);
+	        String consulta2 = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible + ? " +
+	                           "WHERE ID_Juguete = ? AND ID_Stand = ? AND ID_Zona = ?";
 	        
+	        PreparedStatement sentencia2 = conexion.prepareStatement(consulta2);
+	       
 	        sentencia2.setInt(1, cantidad);
 	        sentencia2.setInt(2, idNuevo);
 	        sentencia2.setInt(3, standDestino);
 	        sentencia2.setInt(4, zonaDestino);
 	        sentencia2.executeUpdate();
 
-	        String consulta3 = "INSERT INTO cambio (ID_Empleado, ID_Juguete_Original, ID_Juguete_Nuevo, Motivo, Fecha, " + "Stand_origen, ID_Zona_origen, Stand_destino, ID_Zona_destino) " + "VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?)";    
+	        String consulta3 = "INSERT INTO cambio (ID_Empleado, ID_Juguete_Original, ID_Juguete_Nuevo, Motivo, Fecha, " +
+	                           "Stand_origen, ID_Zona_origen, Stand_destino, ID_Zona_destino) " +
+	                           "VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?)";
+	       
 	        PreparedStatement sentencia3 = conexion.prepareStatement(consulta3);
 	        
 	        sentencia3.setInt(1, idEmpleado);
@@ -190,16 +272,16 @@ public class GestorVentas {
 	        sentencia3.setInt(8, zonaDestino);
 	        sentencia3.executeUpdate();
 
-	        System.out.println("Devolución realizada y cambio registrado correctamente.");
+	        System.out.println("\nDevolución realizada y cambio registrado correctamente.");
 
 	    } catch (SQLException e) {
-	   
+	     
 	    	e.printStackTrace();
-	 
+	    
 	    }
-
-	}
 	
+	}
+
 	public static void realizarVenta(Connection conexion, Scanner entrada) {
 	   
 		if (conexion == null) {
