@@ -44,6 +44,15 @@ public class Main {
 		            case 3:
 		                MenuVentas.mostrarMenuVentas(conexion);
 		                break;
+		                
+		            case 4:
+		                MenuDatosTienda.menuDatosTienda(conexion, entrada);
+		                break;
+		                
+		            case 5:
+		                System.out.println("Saliendo del programa...");
+		                System.exit(0);
+		                break;
 
 		            default:
 		                break;
