@@ -41,6 +41,21 @@ public class MenuDatosTienda {
 			GestorDatosTienda.mostrarVentasPorMes(conexion, entrada);
 			break;
 			
+		case 3:
+			
+			GestorDatosTienda.obtenerVentasEmpleadoMes(conexion, entrada);
+			break;
+			
+		case 4:
+			
+			GestorDatosTienda.mostrarCambiosEmpleados(conexion);
+			break;
+			
+		case 5:
+			
+			GestorDatosTienda.listarProductosOrdenadosPorPrecio(conexion);
+			break;
+			
 		case 6:
 			
 			System.out.println("Saliendo del programa...");
