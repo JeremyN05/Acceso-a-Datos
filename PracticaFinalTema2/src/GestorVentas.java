@@ -104,11 +104,11 @@ public class GestorVentas {
 	    try {
 
 	        System.out.println("\n--- JUGUETES DISPONIBLES ---");
-	        String sqlJuguetes = "SELECT ID_Juguete, Nombre, Precio FROM juguete";
+	        String consulta = "SELECT ID_Juguete, Nombre, Precio FROM juguete";
 	        
-	        PreparedStatement psJuguetes = conexion.prepareStatement(sqlJuguetes);
+	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
 	        
-	        ResultSet resultadoJuguetes = psJuguetes.executeQuery();
+	        ResultSet resultadoJuguetes = sentencia.executeQuery();
 
 	        while (resultadoJuguetes.next()) {
 	           
@@ -124,13 +124,13 @@ public class GestorVentas {
 	        entrada.nextLine();
 
 	        System.out.println("\n--- STANDS Y ZONAS DISPONIBLES ---");
-	        String sqlStands = "SELECT s.ID_Stand, s.ID_Zona, st.Nombre AS Stand, z.Nombre AS Zona " +
+	        String consulta2 = "SELECT s.ID_Stand, s.ID_Zona, st.Nombre AS Stand, z.Nombre AS Zona " +
 	                           "FROM stand st JOIN zona z ON st.ID_Zona = z.ID_Zona " +
 	                           "JOIN stock s ON st.ID_Stand = s.ID_Stand";
 	        
-	        PreparedStatement psStands = conexion.prepareStatement(sqlStands);
+	        PreparedStatement sentencia2 = conexion.prepareStatement(consulta2);
 	        
-	        ResultSet resultadoStands = psStands.executeQuery();
+	        ResultSet resultadoStands = sentencia2.executeQuery();
 
 	        while (resultadoStands.next()) {
 	           
@@ -173,18 +173,18 @@ public class GestorVentas {
 	        double precioOriginal = obtenerPrecioJuguete(conexion, idOriginal);
 
 	        System.out.println("\n--- JUGUETES DEL MISMO PRECIO (" + precioOriginal + "€) ---");
-	        String sqlCompatibles = "SELECT ID_Juguete, Nombre FROM juguete WHERE Precio = ?";
+	        String consulta3 = "SELECT ID_Juguete, Nombre FROM juguete WHERE Precio = ?";
 	        
-	        PreparedStatement psCompatibles = conexion.prepareStatement(sqlCompatibles);
-	        psCompatibles.setDouble(1, precioOriginal);
+	        PreparedStatement sentencia3 = conexion.prepareStatement(consulta3);
+	        sentencia3.setDouble(1, precioOriginal);
 	        
-	        ResultSet rsCompatibles = psCompatibles.executeQuery();
+	        ResultSet resultadoCompatibles = sentencia3.executeQuery();
 
-	        while (rsCompatibles.next()) {
+	        while (resultadoCompatibles.next()) {
 	            
 	        	System.out.println("ID: " + 
-	        	rsCompatibles.getInt("ID_Juguete") + " | Nombre: " + 
-	        	rsCompatibles.getString("Nombre"));
+	        			resultadoCompatibles.getInt("ID_Juguete") + " | Nombre: " + 
+	        			resultadoCompatibles.getString("Nombre"));
 	       
 	        }
 
@@ -193,17 +193,20 @@ public class GestorVentas {
 	        entrada.nextLine();
 
 	        System.out.println("\n--- STANDS DONDE HAY STOCK DEL NUEVO JUGUETE ---");
-	        String sqlStandsNuevo = "SELECT ID_Stand, ID_Zona, Cantidad_disponible " +
+	        String consulta4 = "SELECT ID_Stand, ID_Zona, Cantidad_disponible " +
 	                                "FROM stock WHERE ID_Juguete = ? AND Cantidad_disponible > 0";
-	        PreparedStatement psStandsNuevo = conexion.prepareStatement(sqlStandsNuevo);
-	        psStandsNuevo.setInt(1, idNuevo);
-	        ResultSet rsStandsNuevo = psStandsNuevo.executeQuery();
+	        PreparedStatement sentencia4 = conexion.prepareStatement(consulta4);
+	        sentencia4.setInt(1, idNuevo);
+	        ResultSet resultadoStandsNuevo = sentencia4.executeQuery();
 
-	        while (rsStandsNuevo.next()) {
-	            System.out.println("Stand: " + 
-	        rsStandsNuevo.getInt("ID_Stand") + " | Zona: " + 
-	        rsStandsNuevo.getInt("ID_Zona") + " | Stock: " + 
-	        rsStandsNuevo.getInt("Cantidad_disponible"));
+	        while (resultadoStandsNuevo.next()) {
+	           
+	        	System.out.println("Stand: " + 
+	            		
+	        			resultadoStandsNuevo.getInt("ID_Stand") + " | Zona: " + 
+	            		resultadoStandsNuevo.getInt("ID_Zona") + " | Stock: " + 
+	            		resultadoStandsNuevo.getInt("Cantidad_disponible"));
+	       
 	        }
 
 	        System.out.println("\nIngrese el ID del stand destino:");
@@ -215,14 +218,15 @@ public class GestorVentas {
 	        entrada.nextLine();
 
 	        System.out.println("\n--- EMPLEADOS DISPONIBLES ---");
-	        String sqlEmpleados = "SELECT ID_Empleado, Nombre FROM empleado";
-	        PreparedStatement psEmpleados = conexion.prepareStatement(sqlEmpleados);
-	        ResultSet rsEmpleados = psEmpleados.executeQuery();
+	        String consulta5 = "SELECT ID_Empleado, Nombre FROM empleado";
+	        PreparedStatement sentencia5 = conexion.prepareStatement(consulta5);
+	        ResultSet resultadoEmpleados = sentencia5.executeQuery();
 
-	        while (rsEmpleados.next()) {
-	            System.out.println("Empleado ID: " + 
-	        rsEmpleados.getInt("ID_Empleado") +" | Nombre: " + 
-	        rsEmpleados.getString("Nombre"));
+	        while (resultadoEmpleados.next()) {
+	           
+	        	System.out.println("Empleado ID: " + 
+	        			resultadoEmpleados.getInt("ID_Empleado") +" | Nombre: " + 
+	        			resultadoEmpleados.getString("Nombre"));
 	        
 	        }
 
@@ -234,43 +238,43 @@ public class GestorVentas {
 	        System.out.println("Motivo de la devolución:");
 	        String motivo = entrada.nextLine();
 
-	        String consulta = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible - ? " +
+	        String consulta6 = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible - ? " +
 	                          "WHERE ID_Juguete = ? AND ID_Stand = ? AND ID_Zona = ?";
 	       
-	        PreparedStatement sentencia = conexion.prepareStatement(consulta);
+	        PreparedStatement sentencia6 = conexion.prepareStatement(consulta6);
 	        
-	        sentencia.setInt(1, cantidad);
-	        sentencia.setInt(2, idOriginal);
-	        sentencia.setInt(3, standOrigen);
-	        sentencia.setInt(4, zonaOrigen);
-	        sentencia.executeUpdate();
+	        sentencia6.setInt(1, cantidad);
+	        sentencia6.setInt(2, idOriginal);
+	        sentencia6.setInt(3, standOrigen);
+	        sentencia6.setInt(4, zonaOrigen);
+	        sentencia6.executeUpdate();
 
-	        String consulta2 = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible + ? " +
+	        String consulta7 = "UPDATE stock SET Cantidad_disponible = Cantidad_disponible + ? " +
 	                           "WHERE ID_Juguete = ? AND ID_Stand = ? AND ID_Zona = ?";
 	        
-	        PreparedStatement sentencia2 = conexion.prepareStatement(consulta2);
+	        PreparedStatement sentencia7 = conexion.prepareStatement(consulta7);
 	       
-	        sentencia2.setInt(1, cantidad);
-	        sentencia2.setInt(2, idNuevo);
-	        sentencia2.setInt(3, standDestino);
-	        sentencia2.setInt(4, zonaDestino);
-	        sentencia2.executeUpdate();
+	        sentencia7.setInt(1, cantidad);
+	        sentencia7.setInt(2, idNuevo);
+	        sentencia7.setInt(3, standDestino);
+	        sentencia7.setInt(4, zonaDestino);
+	        sentencia7.executeUpdate();
 
-	        String consulta3 = "INSERT INTO cambio (ID_Empleado, ID_Juguete_Original, ID_Juguete_Nuevo, Motivo, Fecha, " +
+	        String consulta8 = "INSERT INTO cambio (ID_Empleado, ID_Juguete_Original, ID_Juguete_Nuevo, Motivo, Fecha, " +
 	                           "Stand_origen, ID_Zona_origen, Stand_destino, ID_Zona_destino) " +
 	                           "VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?)";
 	       
-	        PreparedStatement sentencia3 = conexion.prepareStatement(consulta3);
+	        PreparedStatement sentencia8 = conexion.prepareStatement(consulta8);
 	        
-	        sentencia3.setInt(1, idEmpleado);
-	        sentencia3.setInt(2, idOriginal);
-	        sentencia3.setInt(3, idNuevo);
-	        sentencia3.setString(4, motivo);
-	        sentencia3.setInt(5, standOrigen);
-	        sentencia3.setInt(6, zonaOrigen);
-	        sentencia3.setInt(7, standDestino);
-	        sentencia3.setInt(8, zonaDestino);
-	        sentencia3.executeUpdate();
+	        sentencia8.setInt(1, idEmpleado);
+	        sentencia8.setInt(2, idOriginal);
+	        sentencia8.setInt(3, idNuevo);
+	        sentencia8.setString(4, motivo);
+	        sentencia8.setInt(5, standOrigen);
+	        sentencia8.setInt(6, zonaOrigen);
+	        sentencia8.setInt(7, standDestino);
+	        sentencia8.setInt(8, zonaDestino);
+	        sentencia8.executeUpdate();
 
 	        System.out.println("\nDevolución realizada y cambio registrado correctamente.");
 

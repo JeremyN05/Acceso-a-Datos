@@ -92,4 +92,9 @@ public class Ticket {
 				+ precioUnitario + ", total=" + total + "]";
 	}
 	
+	public String toStringResumen() {
+	    return String.format("Código: %d | Cantidad: %d | Precio unitario: %.2f | Total: %.2f",
+	            codigoProducto, unidades, precioUnitario, total);
+	}
+
 }

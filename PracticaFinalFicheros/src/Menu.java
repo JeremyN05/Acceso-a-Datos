@@ -18,13 +18,14 @@ public class Menu {
 			
 			System.out.println(VERDE_CLARITO + "--------------------------MENÚ GESTORES--------------------------" + RESET);
 			System.out.println("1. Dar de alta las plantas.");
-			System.out.println("2. Dar de baja las plantas.");
-			System.out.println("3. Modificar campos de las plantas.");
-			System.out.println("4. Dar de alta empleados.");
-			System.out.println("5. Dar de baja empleados.");
-			System.out.println("6. Recuperar o recontrartar empleado de baja.");
-			System.out.println("7. Estadísticas (datos extraídos de los tickets).");
-			System.out.println("8. Salir");
+			System.out.println("2. Recuperar planta de baja");
+			System.out.println("3. Dar de baja las plantas.");
+			System.out.println("4. Modificar campos de las plantas.");
+			System.out.println("5. Dar de alta empleados.");
+			System.out.println("6. Dar de baja empleados.");
+			System.out.println("7. Recuperar o recontrartar empleado de baja.");
+			System.out.println("8. Estadísticas (datos extraídos de los tickets).");
+			System.out.println("9. Salir");
 			
 			opcion = entrada.nextInt();
 			entrada.nextLine();
@@ -32,39 +33,45 @@ public class Menu {
 			switch (opcion) {
 			case 1:
 				
-				GestorBaja_AltaPlantas.darAltaPlantas(entrada);
+				GestorPlantas.añadirPlantas(entrada);
 				break;
 				
 			case 2:
 				
-				GestorBaja_AltaPlantas.darBajaPlantas(entrada);
+				GestorBaja_AltaPlantas.darAltaPlantas(entrada);
 				break;
 				
 			case 3:
 				
-				GestorPlantas.modificarCamposPlanta(entrada);
+				GestorBaja_AltaPlantas.darBajaPlantas(entrada);
 				break;
 				
 			case 4:
 				
-				GestorEmpleados.darAltaEmpleados();
+				GestorPlantas.modificarCamposPlanta(entrada);
 				break;
 				
 			case 5:
 				
-				GestorEmpleados.darBajaEmpleado();
+				GestorEmpleados.darAltaEmpleados();
 				break;
 				
 			case 6:
 				
-				GestorEmpleados.recuperarEmpleadoBaja();
+				GestorEmpleados.darBajaEmpleado();
 				break;
 				
 			case 7:
 				
+				GestorEmpleados.recuperarEmpleadoBaja();
 				break;
 				
 			case 8:
+				
+				Estadisticas.mostrarEstadisticas();
+				break;
+				
+			case 9:
 				
 				System.out.println("Saliendo del programa.");
 				System.exit(0);
@@ -75,7 +82,7 @@ public class Menu {
 				break;
 			}
 			
-		}while(opcion > 8);
+		}while(opcion > 9);
 		
 	}
 

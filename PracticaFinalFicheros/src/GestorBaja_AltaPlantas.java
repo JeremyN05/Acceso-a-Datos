@@ -20,7 +20,7 @@ public class GestorBaja_AltaPlantas {
        
         if (plantaBaja == null) {
            
-        	System.out.println("❌ Planta no encontrada en activas.");
+        	System.out.println("Planta no encontrada en activas.");
            
             return;
        
@@ -85,7 +85,7 @@ public class GestorBaja_AltaPlantas {
        
         if (!archivoBaja.exists() || archivoBaja.length() == 0) {
            
-        	System.out.println("❌ No hay plantas en baja para dar de alta.");
+        	System.out.println("No hay plantas en baja para dar de alta.");
             
             return;
         
@@ -99,7 +99,7 @@ public class GestorBaja_AltaPlantas {
         
         } catch (Exception e) {
            
-        	System.out.println("❌ Error al leer plantas en baja.");
+        	System.out.println("Error al leer plantas en baja.");
             e.printStackTrace();
            
             return;
@@ -134,7 +134,7 @@ public class GestorBaja_AltaPlantas {
 
         if (seleccionada == null) {
            
-        	System.out.println("❌ No se encontró ninguna planta con ese ID.");
+        	System.out.println("No se encontró ninguna planta con ese ID.");
             return;
         
         }
@@ -156,7 +156,8 @@ public class GestorBaja_AltaPlantas {
         listaBajas.remove(seleccionada);
         
         try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(archivoBaja))) {
-            encoder.writeObject(listaBajas);
+            
+        	encoder.writeObject(listaBajas);
         
         }catch(IOException e) {
         	
@@ -166,6 +167,6 @@ public class GestorBaja_AltaPlantas {
 
         System.out.println("Planta dada de alta correctamente: " + seleccionada.getNombre());
     }
-
+    
 }
 

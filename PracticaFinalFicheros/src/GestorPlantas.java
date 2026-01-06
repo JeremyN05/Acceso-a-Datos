@@ -27,6 +27,84 @@ public class GestorPlantas {
     private static final String VERDE_OSCURITO = "\u001B[38;2;34;85;34m";
     private static final String RESET = "\u001B[0m";
     
+    private static int obtenerSiguienteID() {
+
+        int maxId = 0;
+
+        for (Plantas p : listaPlantas) {
+            if (p.getCodigo() > maxId) {
+                maxId = p.getCodigo();
+            }
+        }
+
+        return maxId + 1;
+    }
+
+    
+    public static void añadirPlantas(Scanner entrada) {
+
+        if (listaPlantas.isEmpty()) {
+            mostrarPlantas();
+        }
+        
+        int id = obtenerSiguienteID();
+        System.out.println("ID asignado automáticamente: " + id);
+
+        String nombre;
+        
+        do {
+         
+        	System.out.println("Introduce el nombre de la planta: ");
+            nombre = entrada.nextLine();
+        
+        } while (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"));
+
+        String foto;
+        
+        do {
+          
+        	System.out.println("Introduce el nombre de la foto (ej: planta.jpg): ");
+            foto = entrada.nextLine();
+       
+        } while (!foto.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+\\.jpg$"));
+
+        String descripcion;
+       
+        do {
+          
+        	System.out.println("Introduce la descripción: ");
+            descripcion = entrada.nextLine();
+       
+        } while (!descripcion.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$"));
+
+        System.out.println("Introduce el precio: ");
+        float precio = entrada.nextFloat();
+
+        System.out.println("Introduce el stock: ");
+        int stock = entrada.nextInt();
+        entrada.nextLine();
+
+        Plantas nueva = new Plantas(
+                id,
+                nombre,
+                foto,
+                descripcion,
+                precio,
+                stock
+        );
+
+        listaPlantas.add(nueva);
+
+        guardarPlantasXML();
+        guardarPlantasDat();
+
+        System.out.println("Planta añadida correctamente.");
+        
+        mostrarPlantas();
+        
+    }
+
+    
     private static void modificarStock(Scanner entrada) {
 		
     	int id = 0;

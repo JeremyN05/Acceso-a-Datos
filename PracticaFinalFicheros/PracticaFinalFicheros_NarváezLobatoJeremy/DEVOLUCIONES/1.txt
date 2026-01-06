@@ -1,0 +1,8 @@
+=========== DEVOLUCION DE TICKET ===========
+Ticket original: 4
+Fecha de devolución: 06/01/2026 16:13:49
+--------------------------------------------
+Producto: 1 | Cantidad devuelta: 5 | Precio unitario: 15,00 | Total: 75,00
+Línea devuelta completamente: Producto 1
+--------------------------------------------
+============================================

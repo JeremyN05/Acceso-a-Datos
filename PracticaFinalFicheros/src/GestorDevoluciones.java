@@ -10,75 +10,73 @@ import java.util.Scanner;
 
 public class GestorDevoluciones {
 	
-		private static ArrayList<Ticket> obtenerLineas(int idTicket) {
-			
-			ArrayList<Ticket> lineas = new ArrayList<>();
-		    File fichero = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS/" + idTicket + ".txt");
+	public static ArrayList<Ticket> obtenerLineas(int idTicket) {
+	   
+		ArrayList<Ticket> lineas = new ArrayList<>();
+	    File fichero = new File("PracticaFinalFicheros_NarváezLobatoJeremy/TICKETS/" + idTicket + ".txt");
 
-		    if (!fichero.exists()) {
-		        
-		    	System.out.println("El ticket no existe.");
-		        
-		        return lineas;
-		    
-		    }
+	    if (!fichero.exists()) {
+	     
+	    	System.out.println("El ticket no existe.");
+	        return lineas;
+	   
+	    }
 
-		    boolean leerProductos = false;
+	    boolean leerProductos = false;
 
-		    try (Scanner lector = new Scanner(fichero)) {
-		       
-		    	while (lector.hasNextLine()) {
-		            
-		        	String linea = lector.nextLine().trim();
+	    try (Scanner lector = new Scanner(fichero)) {
+	        
+	    	while (lector.hasNextLine()) {
+	            
+	    		String linea = lector.nextLine().trim();
 
-		            if (linea.startsWith("CódigoProd")) {
-		                
-		            	leerProductos = true;
-		                
-		            	continue;
-		            
-		            }
+	            if (linea.startsWith("Código") && linea.contains("Cant") && linea.contains("Precio")) {
+	             
+	            	leerProductos = true;
+	                continue;
+	            
+	            }
 
-		            if (leerProductos) {
-		                
-		                if (linea.startsWith("---") || linea.startsWith("TOTAL") || linea.isEmpty()) {
-		                    
-		                	break;
-		                
-		                }
+	            if (leerProductos) {
+	              
+	            	if (linea.isEmpty() || linea.startsWith("---") || linea.startsWith("TOTAL") || linea.startsWith("=")) {
+	                
+	            		break;
+	               
+	            	}
 
-		                String[] partes = linea.split("\\s+");
-		                
-		                if (partes.length >= 4) {
-		                    
-		                	try {
-		                        
-		                    	int codigo = Integer.parseInt(partes[0]);
-		                        int cantidad = Integer.parseInt(partes[1]);
-		                        float precio = Float.parseFloat(partes[2]);
-		                        float total = Float.parseFloat(partes[3]);
-		                        lineas.add(new Ticket(codigo, cantidad, precio, total));
-		                    
-		                    } catch (NumberFormatException e) {
-		                       
-		                    
-		                    }
-		                
-		                }
-		            
-		            }
-		        
-		        }
-		    
-		    } catch (FileNotFoundException e) {
-		        
-		    	e.printStackTrace();
-		    
-		    }
+	                String[] partes = linea.split("\\s+");
+	               
+	                if (partes.length >= 4) {
+	                   
+	                	try {
+	                     
+	                		int codigo = Integer.parseInt(partes[0]);
+	                        int cantidad = Integer.parseInt(partes[1]);
+	                        float precio = Float.parseFloat(partes[2].replace(",", "."));
+	                        float total = Float.parseFloat(partes[3].replace(",", "."));
+	                        lineas.add(new Ticket(codigo, cantidad, precio, total));
+	                   
+	                	} catch (NumberFormatException e) {
+	                        System.out.println("Error leyendo línea del ticket: " + linea);
+	                    
+	                	}
+	                
+	                }
+	           
+	            }
+	        
+	    	}
+	    
+	    } catch (Exception e) {
+	    
+	    	e.printStackTrace();
+	    
+	    }
 
-		    return lineas;
-		
-		}
+	    return lineas;
+	
+	}
 
 	public static void realizarDevolucion(Scanner entrada) {
 		
@@ -165,7 +163,7 @@ public class GestorDevoluciones {
                     
                 	Ticket t = lineas.get(i);
                     
-                	System.out.println((i+1) + ". " + t);
+                	System.out.println((i+1) + ". " + t.toStringResumen());
                
                 }
                 

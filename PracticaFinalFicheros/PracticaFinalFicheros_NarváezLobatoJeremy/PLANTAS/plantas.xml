@@ -30,4 +30,16 @@
     <foto>rosa.jpg</foto>
     <descripcion>Flor roja muy común en jardines.</descripcion>
   </planta>
+  <planta>
+    <codigo>6</codigo>
+    <nombre>Tulipan</nombre>
+    <foto>tulipan.jpg</foto>
+    <descripcion>flor blanca</descripcion>
+  </planta>
+  <planta>
+    <codigo>7</codigo>
+    <nombre>Amapola</nombre>
+    <foto>amapola.jpg</foto>
+    <descripcion>flor naranja</descripcion>
+  </planta>
 </plantas>
