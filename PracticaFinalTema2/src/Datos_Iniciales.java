@@ -124,25 +124,32 @@ public class Datos_Iniciales {
 
 
 	        for (int i = 0; i < nombresStands.length; i++) {
-	            String consulta3 = "SELECT * FROM stand WHERE Nombre = ? AND ID_Zona = ?";
-	            PreparedStatement sentencia3 = conexion.prepareStatement(consulta3);
-	            sentencia3.setString(1, nombresStands[i]);
-	            sentencia3.setInt(2, i + 1);
-	            
-	            ResultSet resultado = sentencia3.executeQuery();
-	           
-	            if (!resultado.next()) {
-	             
-	            	String consulta4 = "INSERT INTO stand (ID_Zona, Nombre, Descripcion) VALUES (?, ?, ?)";
-	                PreparedStatement sentencia4 = conexion.prepareStatement(consulta4);
-	                sentencia4.setInt(1, i + 1);
-	                sentencia4.setString(2, nombresStands[i]);
-	                sentencia4.setString(3, descripcionesStands[i]);
-	                sentencia4.executeUpdate();
-	           
+
+	            String obtenerZona = "SELECT ID_Zona FROM zona WHERE Nombre = ?";
+	            PreparedStatement psZona = conexion.prepareStatement(obtenerZona);
+	            psZona.setString(1, nombresZonas[i]);
+	            ResultSet rsZona = psZona.executeQuery();
+
+	            if (rsZona.next()) {
+	                int idZona = rsZona.getInt("ID_Zona");
+
+	                String consulta3 = "SELECT * FROM stand WHERE Nombre = ? AND ID_Zona = ?";
+	                PreparedStatement sentencia3 = conexion.prepareStatement(consulta3);
+	                sentencia3.setString(1, nombresStands[i]);
+	                sentencia3.setInt(2, idZona);
+	                ResultSet resultado = sentencia3.executeQuery();
+
+	                if (!resultado.next()) {
+	                    String consulta4 = "INSERT INTO stand (ID_Zona, Nombre, Descripcion) VALUES (?, ?, ?)";
+	                    PreparedStatement sentencia4 = conexion.prepareStatement(consulta4);
+	                    sentencia4.setInt(1, idZona);
+	                    sentencia4.setString(2, nombresStands[i]);
+	                    sentencia4.setString(3, descripcionesStands[i]);
+	                    sentencia4.executeUpdate();
+	                }
 	            }
-	       
 	        }
+
 
 	        System.out.println("Zonas y stands iniciales creados si no existían.");
 

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 public class ConexionBBDD {
 	
-    private static final String URL = "jdbc:mysql://localhost:3306/jugueteria2";
+    private static final String URL = "jdbc:mysql://localhost:3306/jugueteria";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "cfgs";
 
